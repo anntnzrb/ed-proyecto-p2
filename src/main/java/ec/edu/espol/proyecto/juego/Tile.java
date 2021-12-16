@@ -11,15 +11,15 @@ public final class Tile {
 
     private int  x;
     private int  y;
-    private char data;
+    private char mark;
 
     /* constructores */
     private Tile() {}
 
-    public Tile(final int x, final int y, final char data) {
+    public Tile(final int x, final int y, final char mark) {
         this.x = x;
         this.y = y;
-        this.data = data;
+        this.mark = mark;
     }
 
     /**
@@ -46,16 +46,16 @@ public final class Tile {
         this.y = y;
     }
 
-    public char getData() {
-        return data;
+    public char getMark() {
+        return mark;
     }
 
-    public void setData(final char data) {
-        this.data = data;
+    public void setMark(final char mark) {
+        this.mark = mark;
     }
 
     @Override
     public String toString() {
-        return Character.toString(data);
+        return Character.toString(mark);
     }
 }
