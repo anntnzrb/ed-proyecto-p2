@@ -9,12 +9,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-final public class MainApp extends Application {
+public final class MainApp extends Application {
 
     private static Scene scene;
 
-    public static void main(final String... argv) {
-        launch(argv);
+    public static void main(String... argv) {
+        Application.launch(argv);
     }
 
     @Override
@@ -28,8 +28,8 @@ final public class MainApp extends Application {
     }
 
     @Override
-    public void start(final Stage primaryStage) throws IOException {
-        scene = new Scene(Util.loadFXML("main"));
+    public void start(Stage primaryStage) throws IOException {
+        MainApp.scene = new Scene(Util.loadFXML("main"));
 
         /* ********************************************************************
          * Stage
@@ -40,7 +40,7 @@ final public class MainApp extends Application {
                     .add(new Image(Objects.requireNonNull(
                             MainApp.class
                                     .getResourceAsStream("icon/icon.png"))));
-        primaryStage.setScene(scene);
+        primaryStage.setScene(MainApp.scene);
         primaryStage.show();
     }
 }

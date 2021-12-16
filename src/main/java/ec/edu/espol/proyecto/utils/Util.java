@@ -22,7 +22,7 @@ public enum Util {
      * @param fxml archivo de tipo FXML de la escena
      * @return @{@link FXMLLoader}
      */
-    public static FXMLLoader getFXMLLoader(final String fxml) {
+    public static FXMLLoader getFXMLLoader(String fxml) {
         return new FXMLLoader(MainApp.class.getResource(fxml + ".fxml"));
     }
 
@@ -33,8 +33,8 @@ public enum Util {
      * @return nodo de tipo Parent
      * @throws IOException arroja error si no se encuentra el archivo FXML
      */
-    public static Parent loadFXML(final String fxml) throws IOException {
-        return getFXMLLoader(fxml).load();
+    public static Parent loadFXML(String fxml) throws IOException {
+        return Util.getFXMLLoader(fxml).load();
     }
 
     /* *************************************************************************
@@ -46,7 +46,7 @@ public enum Util {
      *
      * @param msg mensaje a mostrar en pantalla
      */
-    public static void log(final String msg) {
+    public static void log(String msg) {
         System.out.println(msg);
     }
 
@@ -56,12 +56,12 @@ public enum Util {
      * @param msg   mensaje a mostrar
      * @param isLog @{@code true} si se desea mostrar en consola
      */
-    public static void err(final String msg, final boolean isLog,
-                           final boolean isExit) {
+    public static void err(String msg, boolean isLog,
+                           boolean isExit) {
         new Alert(Alert.AlertType.ERROR, msg).showAndWait();
 
         if (isLog) {
-            log(msg);
+            Util.log(msg);
         }
 
         if (isExit) {
@@ -72,8 +72,8 @@ public enum Util {
     /**
      * Wrapper de {@link #err(String, boolean, boolean)}
      */
-    public static void err(final String msg, final boolean isLog) {
-        err(msg, isLog, false);
+    public static void err(String msg, boolean isLog) {
+        Util.err(msg, isLog, false);
     }
 
     /**
@@ -82,10 +82,10 @@ public enum Util {
      * @param msg   mensaje a mostrar
      * @param isLog @{@code true} si se desea mostrar en consola
      */
-    public static void alert(final String msg, final boolean isLog) {
+    public static void alert(String msg, boolean isLog) {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
         if (isLog) {
-            log(msg);
+            Util.log(msg);
         }
     }
 }
