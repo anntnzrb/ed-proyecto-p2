@@ -2,7 +2,7 @@ package ec.edu.espol.proyecto.juego;
 
 public final class Player {
     private String nickname;
-    private char mark;
+    private char   mark;
 
     /* constructores */
     private Player() {}
