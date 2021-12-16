@@ -16,14 +16,14 @@ public final class Tree<E> {
         /* constructores */
         public TreeNode() {}
 
-        public TreeNode(E data) {
+        public TreeNode(final E data) {
             this.data = data;
-            this.children = new LinkedList<>();
+            children = new LinkedList<>();
         }
 
         /* getters & setters */
         public E getData() {
-            return this.data;
+            return data;
         }
     }
 }

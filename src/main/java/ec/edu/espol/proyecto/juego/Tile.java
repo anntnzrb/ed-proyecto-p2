@@ -3,16 +3,20 @@ package ec.edu.espol.proyecto.juego;
 /**
  * Casilla del tablero.
  */
-public class Tile {
+public final class Tile {
+    /**
+     * Caracter que simboliza una casilla vacía.
+     */
+    private static final char NULL_CHAR = '*';
+
     private int  x;
     private int  y;
     private char data;
 
-
     /* constructores */
     private Tile() {}
 
-    public Tile(int x, int y, char data) {
+    public Tile(final int x, final int y, final char data) {
         this.x = x;
         this.y = y;
         this.data = data;
@@ -21,13 +25,13 @@ public class Tile {
     /**
      * Constructor empleado únicamente para crear un tablero vacío
      */
-    protected Tile(int x, int y) {
-        this(x, y, '*');
+    protected Tile(final int x, final int y) {
+        this(x, y, NULL_CHAR);
     }
 
     /* getters & setters */
     public int getX() {
-        return this.x;
+        return x;
     }
 
     public void setX(final int x) {
@@ -35,7 +39,7 @@ public class Tile {
     }
 
     public int getY() {
-        return this.y;
+        return y;
     }
 
     public void setY(final int y) {
@@ -43,7 +47,7 @@ public class Tile {
     }
 
     public char getData() {
-        return this.data;
+        return data;
     }
 
     public void setData(final char data) {

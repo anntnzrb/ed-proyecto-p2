@@ -13,7 +13,7 @@ public final class MainApp extends Application {
 
     private static Scene scene;
 
-    public static void main(String... argv) {
+    public static void main(final String... argv) {
         Application.launch(argv);
     }
 
@@ -28,8 +28,8 @@ public final class MainApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        MainApp.scene = new Scene(Util.loadFXML("main"));
+    public void start(final Stage primaryStage) throws IOException {
+        scene = new Scene(Util.loadFXML("main"));
 
         /* ********************************************************************
          * Stage
@@ -40,7 +40,7 @@ public final class MainApp extends Application {
                     .add(new Image(Objects.requireNonNull(
                             MainApp.class
                                     .getResourceAsStream("icon/icon.png"))));
-        primaryStage.setScene(MainApp.scene);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 }

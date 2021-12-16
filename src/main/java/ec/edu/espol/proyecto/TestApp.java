@@ -5,6 +5,6 @@ import ec.edu.espol.proyecto.juego.Board;
 public final class TestApp {
     public static void main(final String... argv) {
         final var tbl = new Board();
-        tbl.mostrarTablero();
+        tbl.showBoard();
     }
 }

@@ -1,7 +1,5 @@
 package ec.edu.espol.proyecto.juego;
 
-import java.util.Arrays;
-
 public final class Board {
     /**
      * Tamaño del tablero (cuadrado)
@@ -12,19 +10,32 @@ public final class Board {
 
     /* constructores */
     public Board() {
-        this.board = new Tile[Board.BOARD_SIZE][Board.BOARD_SIZE];
-        this.fillBoard();
+        board = new Tile[BOARD_SIZE][BOARD_SIZE];
+        fillBoard();
     }
 
-    private void fillBoard() {
+    /**
+     * Llena el tablero, inicialmente lo llena con el caracter que respresenta
+     * casillas vacías (especificado en {@link Tile}.
+     *
+     * @return copia del tablero ({@link Tile})
+     */
+    private Tile[][] fillBoard() {
         for (int i = 0; i < BOARD_SIZE; ++i) {
             for (int j = 0; j < BOARD_SIZE; ++j) {
                 board[i][j] = new Tile(i, j);
             }
         }
+
+        return board.clone();
     }
 
-    public Board mostrarTablero() {
+    /**
+     * Muestra el contenido del tablero.
+     *
+     * @return copia del tablero ({@link Tile})
+     */
+    public Tile[][] showBoard() {
         for (int i = 0; i < BOARD_SIZE; ++i) {
             for (int j = 0; j < BOARD_SIZE; ++j) {
                 System.out.print(" | " + board[i][j]);
@@ -32,11 +43,6 @@ public final class Board {
             System.out.println(" |");
         }
 
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(board);
+        return board.clone();
     }
 }
