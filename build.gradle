@@ -17,6 +17,11 @@ repositories {
 }
 
 dependencies {
+    // test
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+    // JavaFX
     runtimeOnly "org.openjfx:javafx-base:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-base:$javafx.version:linux"
     runtimeOnly "org.openjfx:javafx-base:$javafx.version:mac"
@@ -26,6 +31,10 @@ dependencies {
     runtimeOnly "org.openjfx:javafx-fxml:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-fxml:$javafx.version:linux"
     runtimeOnly "org.openjfx:javafx-fxml:$javafx.version:mac"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 jar {
