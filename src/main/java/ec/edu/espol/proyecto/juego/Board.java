@@ -1,5 +1,7 @@
 package ec.edu.espol.proyecto.juego;
 
+import java.util.stream.IntStream;
+
 public final class Board {
     /**
      * Tamaño del tablero (cuadrado).
@@ -73,6 +75,12 @@ public final class Board {
         return board.clone();
     }
 
+    /**
+     * Verifica si todos los elementos de alguna de las 2 diagonales
+     * son iguales.
+     *
+     * @return marca ganadora (NULL_CHAR si es nadie gana)
+     */
     public char checkDiagonals() {
         boolean isDiagonalValid = true;
 
@@ -85,39 +93,56 @@ public final class Board {
         }
 
         // check diagonal secundaria (solo si la principal es válida)
-        if (isDiagonalValid) {
+        if (!isDiagonalValid) {
             for (int i = BOARD_SIZE - 1; i > 0; --i) {
                 if (board[i][i].getMark() != board[i - 1][i - 1].getMark()) {
-                    isDiagonalValid = false;
                     break;
                 }
             }
         }
 
-        return isDiagonalValid ? board[0][0].getMark() : '*';
+        /*
+         * si alguna de las diagonales es válida, entonces la marca ganadora
+         * pasará por el centro del tablero.
+         */
+        return isDiagonalValid ? board[1][1].getMark() : '*';
     }
 
+    /**
+     * Verifica si todos los elementos de alguna fila son iguales.
+     *
+     * @return marca ganadora (NULL_CHAR si es nadie gana)
+     */
     public char checkRows() {
         // check primera fila
-        final char fr00 = board[0][0].getMark();
-        final char fr01 = board[0][1].getMark();
-        final char fr02 = board[0][2].getMark();
-        final boolean frCheck = fr00 == fr01 && fr01 == fr02;
+        final boolean frCheck = IntStream.range(0, BOARD_SIZE - 1)
+                                         .noneMatch(i -> board[0][i].getMark()
+                                                         != board[0][i + 1].
+                                                                 getMark());
 
         // check segunda fila
-        final char sr00 = board[1][0].getMark();
-        final char sr01 = board[1][1].getMark();
-        final char sr02 = board[1][2].getMark();
-        final boolean srCheck = sr00 == sr01 && sr01 == sr02;
+        final boolean srCheck = IntStream.range(0, BOARD_SIZE - 1)
+                                         .noneMatch(i -> board[1][i].getMark()
+                                                         != board[1][i + 1].
+                                                                 getMark());
 
         // check tercera fila
-        final char tr00 = board[2][0].getMark();
-        final char tr01 = board[2][1].getMark();
-        final char tr02 = board[2][2].getMark();
-        final boolean trCheck = tr00 == tr01 && tr01 == sr02;
+        final boolean trCheck = IntStream.range(0, BOARD_SIZE - 1)
+                                         .noneMatch(i -> board[2][i].getMark()
+                                                         != board[1][i + 1]
+                                                                 .getMark());
 
-        final boolean isWin = frCheck && srCheck && trCheck;
+        /* si se gana, retornar la marca ganadora */
+        if (frCheck || srCheck || trCheck) {
+            if (frCheck) {
+                return board[0][0].getMark();
+            } else if (srCheck) {
+                return board[1][1].getMark();
+            } else {
+                return board[2][2].getMark();
+            }
+        }
 
-        return isWin ? board[0][0].getMark() : '*';
+        return '*';
     }
 }
