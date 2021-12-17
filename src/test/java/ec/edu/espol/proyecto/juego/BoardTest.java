@@ -8,9 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SuppressWarnings({"ClassWithoutConstructor", "AssertWithoutMessage"})
 final class BoardTest {
     private Board tblEmpate;
-    private Board tblFila1;
-    private Board tblFila2;
-    private Board tblFila3;
+    private Board tblFil1;
+    private Board tblFil2;
+    private Board tblFil3;
+    private Board tblCol1;
+    private Board tblCol2;
+    private Board tblCol3;
     private Board tblDiagonal0;
     private Board tblDiagonal1;
 
@@ -41,44 +44,66 @@ final class BoardTest {
         /* *********************************************************************
          * Tablero fila #1
          * ****************************************************************** */
-        tblFila1 = new Board(p1, p2);
-        tblFila1.modBoard(0, 0, 'X');
-        tblFila1.modBoard(1, 0, 'O');
-        tblFila1.modBoard(0, 2, 'X');
-        tblFila1.modBoard(1, 1, 'O');
-        tblFila1.modBoard(0, 1, 'X');
-        tblFila1.modBoard(2, 0, 'O');
-        tblFila1.modBoard(1, 2, 'X');
-        tblFila1.modBoard(2, 2, 'O');
-        tblFila1.modBoard(2, 1, 'X');
+        tblFil1 = new Board(p1, p2);
+        tblFil1.modBoard(0, 0, 'X');
+        tblFil1.modBoard(1, 2, 'O');
+        tblFil1.modBoard(0, 1, 'X');
+        tblFil1.modBoard(2, 2, 'O');
+        tblFil1.modBoard(0, 2, 'X');
 
         /* *********************************************************************
          * Tablero fila #2
          * ****************************************************************** */
-        tblFila2 = new Board(p1, p2);
-        tblFila2.modBoard(2, 0, 'O');
-        tblFila2.modBoard(0, 2, 'X');
-        tblFila2.modBoard(1, 0, 'O');
-        tblFila2.modBoard(0, 1, 'X');
-        tblFila2.modBoard(1, 1, 'O');
-        tblFila2.modBoard(2, 1, 'X');
-        tblFila2.modBoard(1, 2, 'O');
-        tblFila2.modBoard(0, 0, 'O');
-        tblFila2.modBoard(2, 2, 'O');
+        tblFil2 = new Board(p1, p2);
+        tblFil2.modBoard(0, 2, 'X');
+        tblFil2.modBoard(1, 0, 'O');
+        tblFil2.modBoard(0, 1, 'X');
+        tblFil2.modBoard(1, 1, 'O');
+        tblFil2.modBoard(2, 1, 'X');
+        tblFil2.modBoard(1, 2, 'O');
+        tblFil2.modBoard(2, 0, 'X');
+        tblFil2.modBoard(0, 0, 'O');
+        tblFil2.modBoard(2, 2, 'O');
 
         /* *********************************************************************
          * Tablero fila #3
          * ****************************************************************** */
-        tblFila3 = new Board(p1, p2);
-        tblFila3.modBoard(2, 0, 'O');
-        tblFila3.modBoard(0, 2, 'X');
-        tblFila3.modBoard(1, 1, 'O');
-        tblFila3.modBoard(2, 1, 'O');
-        tblFila3.modBoard(0, 1, 'X');
-        tblFila3.modBoard(1, 2, 'O');
-        tblFila3.modBoard(1, 0, 'X');
-        tblFila3.modBoard(0, 0, 'O');
-        tblFila3.modBoard(2, 2, 'O');
+        tblFil3 = new Board(p1, p2);
+        tblFil3.modBoard(2, 0, 'O');
+        tblFil3.modBoard(0, 0, 'X');
+        tblFil3.modBoard(2, 1, 'O');
+        tblFil3.modBoard(1, 1, 'X');
+        tblFil3.modBoard(2, 2, 'O');
+
+        /* *********************************************************************
+         * Tablero columna #1
+         * ****************************************************************** */
+        tblCol1 = new Board(p1, p2);
+        tblCol1.modBoard(0,0,'X');
+        tblCol1.modBoard(0,1,'O');
+        tblCol1.modBoard(1,0,'X');
+        tblCol1.modBoard(0,2,'O');
+        tblCol1.modBoard(2,0,'X');
+
+        /* *********************************************************************
+         * Tablero columna #2
+         * ****************************************************************** */
+        tblCol2 = new Board(p1, p2);
+        tblCol2.modBoard(0,1,'O');
+        tblCol2.modBoard(0,0,'X');
+        tblCol2.modBoard(1,1,'O');
+        tblCol2.modBoard(2,2,'X');
+        tblCol2.modBoard(2,1,'O');
+
+        /* *********************************************************************
+         * Tablero columna #3
+         * ****************************************************************** */
+        tblCol3 = new Board(p1, p2);
+        tblCol3.modBoard(0,2,'X');
+        tblCol3.modBoard(2,0,'O');
+        tblCol3.modBoard(1,2,'X');
+        tblCol3.modBoard(0,0,'O');
+        tblCol3.modBoard(2,2,'X');
 
         /* *********************************************************************
          * Tablero con diagonal primaria
@@ -97,26 +122,39 @@ final class BoardTest {
         tblDiagonal1.modBoard(0, 0, 'O');
         tblDiagonal1.modBoard(0, 1, 'X');
         tblDiagonal1.modBoard(1, 1, 'O');
-        tblDiagonal1.modBoard(1, 0, 'X');
-        tblDiagonal1.modBoard(2, 0, 'O');
+        tblDiagonal1.modBoard(0, 2, 'X');
         tblDiagonal1.modBoard(2, 2, 'O');
-        tblDiagonal1.modBoard(0, 2, 'O');
     }
 
     @Test
     void checkRows() {
         System.out.println("\nPrimera fila válida, gana 'X'");
-        tblFila1.showBoard();
-        assertEquals('X', tblFila1.checkRows());
+        tblFil1.showBoard();
+        assertEquals('X', tblFil1.checkRows());
 
         System.out.println("\nSegunda fila válida, gana 'O'");
-        tblFila2.showBoard();
-        assertEquals('O', tblFila2.checkRows());
+        tblFil2.showBoard();
+        assertEquals('O', tblFil2.checkRows());
 
         System.out.println("\nTercera fila inválida, gana 'O'");
-        tblFila3.showBoard();
-        assertEquals('O', tblFila3.checkRows());
+        tblFil3.showBoard();
+        assertEquals('O', tblFil3.checkRows());
 
+    }
+
+    @Test
+    void checkCols() {
+        System.out.println("\nPrimera columna válida, gana 'X'");
+        tblCol1.showBoard();
+        assertEquals('X', tblCol1.checkCols());
+
+        System.out.println("\nSegunda columna válida, gana 'O'");
+        tblCol2.showBoard();
+        assertEquals('O', tblCol2.checkCols());
+
+        System.out.println("\nTercera columna válida, gana 'X'");
+        tblCol3.showBoard();
+        assertEquals('X', tblCol3.checkCols());
     }
 
     @Test

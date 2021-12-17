@@ -84,13 +84,23 @@ public final class Board {
     public char checkDiagonals() {
         // check diagonal principal
         boolean isDiagonalValid = IntStream.range(0, BOARD_SIZE - 1)
-                                           .noneMatch(i -> board[i][i].getMark() != board[i + 1][i + 1].getMark());
+                                           .noneMatch(i -> board[i + 1][i + 1].getMark() == '*'
+                                                           || board[i][i].getMark() != board[i + 1][i + 1].getMark());
 
         // check diagonal secundaria (solo si la principal es válida)
         if (!isDiagonalValid) {
             for (int i = BOARD_SIZE - 1; i > 0; --i) {
+                final var x = board[i][i].getMark();
+                final var y = board[i - 1][i - 1].getMark();
+
+                /* si se encuentra el NULL_CHAR, no es válida */
+                if (x == '*' || y == '*') {
+                    isDiagonalValid = false;
+                    break;
+                }
+
                 // hacer la condición válida si es que son iguales
-                if (board[i][i].getMark() == board[i - 1][i - 1].getMark()) {
+                if (x == y) {
                     isDiagonalValid = true;
                 } else {
                     isDiagonalValid = false;
@@ -114,23 +124,58 @@ public final class Board {
     public char checkRows() {
         // check primera fila
         final boolean frCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[0][i].getMark()
-                                                         != board[0][i + 1].
-                                                                 getMark());
+                                         .noneMatch(i -> board[0][i].getMark() == '*'
+                                                         || board[0][i].getMark() != board[0][i + 1].getMark());
 
         // check segunda fila
         final boolean srCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[1][i].getMark() != board[1][i + 1].getMark());
+                                         .noneMatch(i -> board[1][i].getMark() == '*'
+                                                         || board[1][i].getMark() != board[1][i + 1].getMark());
 
         // check tercera fila
         final boolean trCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[2][i].getMark() != board[1][i + 1].getMark());
+                                         .noneMatch(i -> board[2][i].getMark() == '*'
+                                                         || board[2][i].getMark() != board[2][i + 1].getMark());
 
         /* si se gana, retornar la marca ganadora */
         if (frCheck || srCheck || trCheck) {
             if (frCheck) {
                 return board[0][0].getMark();
             } else if (srCheck) {
+                return board[1][1].getMark();
+            } else {
+                return board[2][2].getMark();
+            }
+        }
+
+        return '*';
+    }
+
+    /**
+     * Verifica si todos los elementos de alguna columna son iguales.
+     *
+     * @return marca ganadora (NULL_CHAR si nadie gana)
+     */
+    public char checkCols() {
+        // check primera columna
+        final boolean fcCheck = IntStream.range(0, BOARD_SIZE - 1)
+                                         .noneMatch(i -> board[i][0].getMark() == '*'
+                                                         || board[i][0].getMark() != board[i + 1][0].getMark());
+
+        // check segunda columna
+        final boolean scCheck = IntStream.range(0, BOARD_SIZE - 1)
+                                         .noneMatch(i -> board[i][1].getMark() == '*'
+                                                         || board[i][1].getMark() != board[i + 1][1].getMark());
+
+        // check tercera columna
+        final boolean tcCheck = IntStream.range(0, BOARD_SIZE - 1)
+                                         .noneMatch(i -> board[i][2].getMark() == '*'
+                                                         || board[i][2].getMark() != board[i + 1][2].getMark());
+
+        if (fcCheck || scCheck || tcCheck) {
+            if (fcCheck) {
+                return board[0][0].getMark();
+            } else if (scCheck) {
                 return board[1][1].getMark();
             } else {
                 return board[2][2].getMark();
