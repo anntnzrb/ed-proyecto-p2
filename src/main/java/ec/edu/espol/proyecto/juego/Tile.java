@@ -1,14 +1,11 @@
 package ec.edu.espol.proyecto.juego;
 
+import static ec.edu.espol.proyecto.juego.Game.NULL_CHAR;
+
 /**
  * Casilla del tablero.
  */
 public final class Tile {
-    /**
-     * Caracter que simboliza una casilla vacía.
-     */
-    private static final char NULL_CHAR = '*';
-
     private int  x;
     private int  y;
     private char mark;
@@ -16,7 +13,7 @@ public final class Tile {
     /* constructores */
     private Tile() {}
 
-    public Tile(final int x, final int y, final char mark) {
+    private Tile(final int x, final int y, final char mark) {
         this.x = x;
         this.y = y;
         this.mark = mark;
@@ -25,7 +22,7 @@ public final class Tile {
     /**
      * Constructor empleado únicamente para crear un tablero vacío
      */
-    protected Tile(final int x, final int y) {
+    Tile(final int x, final int y) {
         this(x, y, NULL_CHAR);
     }
 
@@ -46,11 +43,11 @@ public final class Tile {
         this.y = y;
     }
 
-    public char getMark() {
+    char getMark() {
         return mark;
     }
 
-    public void setMark(final char mark) {
+    void setMark(final char mark) {
         this.mark = mark;
     }
 

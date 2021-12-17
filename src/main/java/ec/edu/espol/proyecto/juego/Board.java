@@ -2,6 +2,8 @@ package ec.edu.espol.proyecto.juego;
 
 import java.util.stream.IntStream;
 
+import static ec.edu.espol.proyecto.juego.Game.NULL_CHAR;
+
 public final class Board {
     /**
      * Tamaño del tablero (cuadrado).
@@ -63,16 +65,35 @@ public final class Board {
         return board.clone();
     }
 
-    public boolean checkWin() {
-
-        return false;
-    }
-
     /* métodos auxiliares */
     public Tile[][] modBoard(final int x, final int y, final char mark) {
         board[x][y].setMark(mark);
 
         return board.clone();
+    }
+
+    /**
+     * Verifica si el juego se ha ganada y retorna la marca de quién ganó.
+     *
+     * @return marca ganadora (NULL_CHAR si empate)
+     */
+    public char checkWin() {
+        final char winRow = checkRows();
+        final char winCol = checkCols();
+        final char winDiag = checkDiagonals();
+
+        if (winRow != NULL_CHAR) {
+            return winRow;
+        }
+        if (winCol != NULL_CHAR) {
+            return winCol;
+        }
+        if (winDiag != NULL_CHAR) {
+            return winDiag;
+        }
+
+        // retorna (0) si es empate
+        return 0;
     }
 
     /**
@@ -84,7 +105,7 @@ public final class Board {
     public char checkDiagonals() {
         // check diagonal principal
         boolean isDiagonalValid = IntStream.range(0, BOARD_SIZE - 1)
-                                           .noneMatch(i -> board[i + 1][i + 1].getMark() == '*'
+                                           .noneMatch(i -> board[i + 1][i + 1].getMark() == NULL_CHAR
                                                            || board[i][i].getMark() != board[i + 1][i + 1].getMark());
 
         // check diagonal secundaria (solo si la principal es válida)
@@ -94,7 +115,7 @@ public final class Board {
                 final var y = board[i - 1][i - 1].getMark();
 
                 /* si se encuentra el NULL_CHAR, no es válida */
-                if (x == '*' || y == '*') {
+                if (x == NULL_CHAR || y == NULL_CHAR) {
                     isDiagonalValid = false;
                     break;
                 }
@@ -113,7 +134,7 @@ public final class Board {
          * si alguna de las diagonales es válida, entonces la marca ganadora
          * pasará por el centro del tablero.
          */
-        return isDiagonalValid ? board[1][1].getMark() : '*';
+        return isDiagonalValid ? board[1][1].getMark() : NULL_CHAR;
     }
 
     /**
@@ -124,17 +145,17 @@ public final class Board {
     public char checkRows() {
         // check primera fila
         final boolean frCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[0][i].getMark() == '*'
+                                         .noneMatch(i -> board[0][i].getMark() == NULL_CHAR
                                                          || board[0][i].getMark() != board[0][i + 1].getMark());
 
         // check segunda fila
         final boolean srCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[1][i].getMark() == '*'
+                                         .noneMatch(i -> board[1][i].getMark() == NULL_CHAR
                                                          || board[1][i].getMark() != board[1][i + 1].getMark());
 
         // check tercera fila
         final boolean trCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[2][i].getMark() == '*'
+                                         .noneMatch(i -> board[2][i].getMark() == NULL_CHAR
                                                          || board[2][i].getMark() != board[2][i + 1].getMark());
 
         /* si se gana, retornar la marca ganadora */
@@ -148,7 +169,7 @@ public final class Board {
             }
         }
 
-        return '*';
+        return NULL_CHAR;
     }
 
     /**
@@ -159,17 +180,17 @@ public final class Board {
     public char checkCols() {
         // check primera columna
         final boolean fcCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[i][0].getMark() == '*'
+                                         .noneMatch(i -> board[i][0].getMark() == NULL_CHAR
                                                          || board[i][0].getMark() != board[i + 1][0].getMark());
 
         // check segunda columna
         final boolean scCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[i][1].getMark() == '*'
+                                         .noneMatch(i -> board[i][1].getMark() == NULL_CHAR
                                                          || board[i][1].getMark() != board[i + 1][1].getMark());
 
         // check tercera columna
         final boolean tcCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[i][2].getMark() == '*'
+                                         .noneMatch(i -> board[i][2].getMark() == NULL_CHAR
                                                          || board[i][2].getMark() != board[i + 1][2].getMark());
 
         if (fcCheck || scCheck || tcCheck) {
@@ -182,6 +203,6 @@ public final class Board {
             }
         }
 
-        return '*';
+        return NULL_CHAR;
     }
 }
