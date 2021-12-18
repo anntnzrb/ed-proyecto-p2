@@ -11,12 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="621.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="621.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.SecondController">
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="Salir">
+          <Menu fx:id="btnSalir" mnemonicParsing="false" onAction="#onSalirBtnClick" text="Salir">
             <items>
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
@@ -35,7 +34,7 @@
                   <Font name="System Bold Italic" size="43.0" />
                </font>
             </Label>
-            <Button layoutX="30.0" layoutY="456.0" mnemonicParsing="false" text="Regresar">
+            <Button fx:id="btnRegresar" layoutX="30.0" layoutY="456.0" mnemonicParsing="false" onAction="#onRegresarBtnClick" text="Regresar">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -59,11 +58,13 @@
             <Button fx:id="btn7" layoutX="171.0" layoutY="340.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="92.0" />
             <Button fx:id="btn8" layoutX="274.0" layoutY="340.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="92.0" />
             <Button fx:id="btn9" layoutX="375.0" layoutY="340.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="92.0" />
-            <Button layoutX="499.0" layoutY="456.0" mnemonicParsing="false" text="Mostrar árbol">
+            <Button fx:id="btnMostrar" layoutX="499.0" layoutY="456.0" mnemonicParsing="false" text="Mostrar árbol">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Button>
+            <Label fx:id="lblJugador1" layoutX="214.0" layoutY="75.0" prefHeight="30.0" prefWidth="98.0" text="Label" />
+            <Label fx:id="lblJugador2" layoutX="338.0" layoutY="75.0" prefHeight="30.0" prefWidth="98.0" text="Label" />
          </children>
       </AnchorPane>
    </children>

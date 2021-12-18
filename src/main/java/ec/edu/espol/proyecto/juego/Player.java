@@ -12,6 +12,10 @@ public final class Player {
         this.mark = mark;
     }
 
+    public Player(String nickname) {
+        this.nickname = nickname;
+    }
+
     /* getters & setters */
     public String getNickname() {
         return nickname;

@@ -45,12 +45,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.MainController">
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="Salir">
+          <Menu mnemonicParsing="false" onAction="#onSalirBtnClick" text="Salir">
             <items>
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
@@ -89,7 +88,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnEmpezar" layoutX="273.0" layoutY="452.0" mnemonicParsing="false" text="Empezar">
+            <Button fx:id="btnEmpezar" layoutX="273.0" layoutY="452.0" mnemonicParsing="false" onAction="#onBtnEmpezarClick" text="Empezar">
                <font>
                   <Font name="System Bold Italic" size="16.0" />
                </font>

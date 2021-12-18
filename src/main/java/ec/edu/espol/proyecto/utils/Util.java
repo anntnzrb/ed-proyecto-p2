@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 
 import java.io.IOException;
+import javafx.scene.Scene;
 
 /**
  * Enum Util.
@@ -87,5 +88,9 @@ public enum Util {
         if (isLog) {
             log(msg);
         }
+    }
+    
+     public static Scene getNewScene(final String fxml) throws IOException {
+        return new Scene(loadFXML(fxml));
     }
 }
