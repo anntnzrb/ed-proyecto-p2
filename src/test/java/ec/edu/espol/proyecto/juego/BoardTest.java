@@ -17,6 +17,7 @@ final class BoardTest {
     private Board tblCol3;
     private Board tblDiagonal0;
     private Board tblDiagonal1;
+    private Board tblUtilidad;
 
     private Player p1;
     private Player p2;
@@ -125,6 +126,13 @@ final class BoardTest {
         tblDiagonal1.modBoard(1, 1, O_MARK);
         tblDiagonal1.modBoard(0, 2, X_MARK);
         tblDiagonal1.modBoard(2, 2, O_MARK);
+
+        /* *********************************************************************
+         * Tablero utilidad
+         * ****************************************************************** */
+        tblUtilidad = new Board(p1, p2);
+        tblUtilidad.modBoard(0, 0, X_MARK);
+        tblUtilidad.modBoard(1, 0, O_MARK);
     }
 
     @Test
@@ -177,5 +185,13 @@ final class BoardTest {
     void checkWin() {
         assertEquals(0, tblEmpate.checkWin());
         assertEquals(X_MARK, tblDiagonal0.checkWin());
+    }
+
+    @Test
+    void utilityBoard() {
+        System.out.println("\nUtilidad de 'X' = 1 | 'O' = -1");
+        tblUtilidad.showBoard();
+        assertEquals(1, tblUtilidad.utilityBoard(X_MARK));
+        assertEquals(-1, tblUtilidad.utilityBoard(O_MARK));
     }
 }

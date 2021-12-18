@@ -2,7 +2,7 @@ package ec.edu.espol.proyecto.juego;
 
 import java.util.stream.IntStream;
 
-import static ec.edu.espol.proyecto.juego.Game.NULL_CHAR;
+import static ec.edu.espol.proyecto.juego.Game.*;
 
 public final class Board {
     /**
@@ -24,7 +24,7 @@ public final class Board {
     private Player p2;
 
     /* constructores */
-    private Board() {}
+    private Board() { }
 
     public Board(final Player p1, final Player p2) {
         this.p1 = p1;
@@ -70,6 +70,86 @@ public final class Board {
         board[x][y].setMark(mark);
 
         return board.clone();
+    }
+
+    public int utilityBoard(final char mark) {
+        return mark == X_MARK
+               ? utilityMark(X_MARK) - utilityMark(O_MARK)
+               : utilityMark(O_MARK) - utilityMark(X_MARK);
+    }
+
+    private int utilityMark(final char mark) {
+        char otherMark = mark;
+        if (mark == X_MARK) {
+            otherMark = O_MARK;
+        } else if (mark == O_MARK) {
+            otherMark = X_MARK;
+        }
+
+        int fil = 3;
+        int col = 3;
+        int diag = 2;
+
+        // check filas
+        if (isInRow(0, otherMark)) { --fil; }
+        if (isInRow(1, otherMark)) { --fil; }
+        if (isInRow(2, otherMark)) { --fil; }
+
+        // check columnas
+        if (isInCol(0, otherMark)) { --col; }
+        if (isInCol(1, otherMark)) { --col; }
+        if (isInCol(2, otherMark)) { --col; }
+
+        // check diagonales
+        if (isInDiag(0, otherMark)) { --diag; }
+        if (isInDiag(1, otherMark)) { --diag; }
+
+        return fil + col + diag;
+    }
+
+    /**
+     * Busca la marca en la fila pasada por parámetro.
+     *
+     * @param row  fila a analizar
+     * @param mark marca a buscar
+     * @return {@code true} si la marca se encuentra,
+     * {@code false} caso contrario
+     */
+    private boolean isInRow(final int row, final char mark) {
+        return IntStream.range(0, BOARD_SIZE)
+                        .anyMatch(i -> board[row][i].getMark() == mark);
+    }
+
+    /**
+     * Busca la marca en la columna pasada por parámetro.
+     *
+     * @param col  columna a analizar
+     * @param mark marca a buscar
+     * @return {@code true} si la marca se encuentra,
+     * {@code false} caso contrario
+     */
+    private boolean isInCol(final int col, final char mark) {
+        return IntStream.range(0, BOARD_SIZE)
+                        .anyMatch(i -> board[i][col].getMark() == mark);
+    }
+
+    /**
+     * Busca la marca dada en alguna de las 2 diagonales. Si el valor de diag
+     * es 0, busca en la diagonal principal, caso contrario busca en la
+     * diagonal secundaria.
+     *
+     * @param diag diagonal a analizar
+     * @param mark marca a buscar
+     * @return {@code true} si la marca se encuentra,
+     * {@code false} caso contrario
+     */
+    private boolean isInDiag(final int diag, final char mark) {
+        if (diag == 0) {
+            return IntStream.range(0, BOARD_SIZE - 1).anyMatch(i -> board[i][i].getMark() == mark);
+        } else {
+            return IntStream.iterate(BOARD_SIZE - 1, i -> i > 0, i -> i - 1)
+                            .anyMatch(i -> board[i][i].getMark() == mark);
+        }
     }
 
     /**
