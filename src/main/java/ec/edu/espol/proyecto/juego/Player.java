@@ -20,4 +20,10 @@ public final class Player {
     public char getMark() {
         return mark;
     }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
+    
 }
