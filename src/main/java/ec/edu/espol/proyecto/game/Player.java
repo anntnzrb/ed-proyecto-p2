@@ -1,4 +1,4 @@
-package ec.edu.espol.proyecto.juego;
+package ec.edu.espol.proyecto.game;
 
 public final class Player {
     private String nickname;

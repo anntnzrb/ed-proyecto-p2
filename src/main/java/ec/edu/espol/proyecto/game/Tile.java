@@ -1,6 +1,6 @@
-package ec.edu.espol.proyecto.juego;
+package ec.edu.espol.proyecto.game;
 
-import static ec.edu.espol.proyecto.juego.Game.NULL_CHAR;
+import static ec.edu.espol.proyecto.game.Game.NULL_CHAR;
 
 /**
  * Casilla del tablero.

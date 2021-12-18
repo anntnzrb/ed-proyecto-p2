@@ -1,4 +1,4 @@
-package ec.edu.espol.proyecto.juego;
+package ec.edu.espol.proyecto.game;
 
 public enum Game {
     ;

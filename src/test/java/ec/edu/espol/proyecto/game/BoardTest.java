@@ -1,9 +1,9 @@
-package ec.edu.espol.proyecto.juego;
+package ec.edu.espol.proyecto.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static ec.edu.espol.proyecto.juego.Game.*;
+import static ec.edu.espol.proyecto.game.Game.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings({"ClassWithoutConstructor", "AssertWithoutMessage"})

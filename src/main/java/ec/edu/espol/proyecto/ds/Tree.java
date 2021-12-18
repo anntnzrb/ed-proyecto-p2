@@ -1,4 +1,4 @@
-package ec.edu.espol.proyecto.tda;
+package ec.edu.espol.proyecto.ds;
 
 import java.util.LinkedList;
 import java.util.List;

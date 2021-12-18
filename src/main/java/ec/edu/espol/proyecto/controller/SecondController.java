@@ -1,6 +1,6 @@
 package ec.edu.espol.proyecto.controller;
 
-import ec.edu.espol.proyecto.juego.Player;
+import ec.edu.espol.proyecto.game.Player;
 import ec.edu.espol.proyecto.utils.Util;
 import java.io.IOException;
 import javafx.application.Platform;

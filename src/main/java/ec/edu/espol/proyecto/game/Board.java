@@ -1,8 +1,8 @@
-package ec.edu.espol.proyecto.juego;
+package ec.edu.espol.proyecto.game;
 
 import java.util.stream.IntStream;
 
-import static ec.edu.espol.proyecto.juego.Game.*;
+import static ec.edu.espol.proyecto.game.Game.*;
 
 public final class Board {
     /**
@@ -65,19 +65,64 @@ public final class Board {
         return board.clone();
     }
 
-    /* métodos auxiliares */
+    /**
+     * Modifica la marca del tablero a partir de las coordenadas x e y
+     * pasadas por parámetro.
+     *
+     * @param x    coordenada x del tablero
+     * @param y    coordenada y del tablero
+     * @param mark marca a modificar
+     * @return copia del tablero ({@link Tile})
+     */
     public Tile[][] modBoard(final int x, final int y, final char mark) {
         board[x][y].setMark(mark);
 
         return board.clone();
     }
 
+    /**
+     * Verifica si el juego se ha ganada y retorna la marca de quién ganó.
+     *
+     * @return marca ganadora (NULL_CHAR si empate)
+     */
+    public char checkWin() {
+        final char winRow = checkRows();
+        final char winCol = checkCols();
+        final char winDiag = checkDiagonals();
+
+        if (winRow != NULL_CHAR) {
+            return winRow;
+        }
+        if (winCol != NULL_CHAR) {
+            return winCol;
+        }
+        if (winDiag != NULL_CHAR) {
+            return winDiag;
+        }
+
+        // retorna (0) si es empate
+        return 0;
+    }
+
+    /**
+     * Calcula el valor de utilidad de una marca en el tablero
+     * (con respecto a la otra marca).
+     *
+     * @param mark marca a analizar
+     * @return valor de utilidad de la marca
+     */
     public int utilityBoard(final char mark) {
         return mark == X_MARK
                ? utilityMark(X_MARK) - utilityMark(O_MARK)
                : utilityMark(O_MARK) - utilityMark(X_MARK);
     }
 
+    /**
+     * Calcula la utilidad de una marca en específico.
+     *
+     * @param mark marca a analizar
+     * @return valor de utilidad de la marca
+     */
     private int utilityMark(final char mark) {
         char otherMark = mark;
         if (mark == X_MARK) {
@@ -106,6 +151,10 @@ public final class Board {
 
         return fil + col + diag;
     }
+
+    /* ************************************************************************
+     * métodos auxiliares
+     * ********************************************************************* */
 
     /**
      * Busca la marca en la fila pasada por parámetro.
@@ -150,30 +199,6 @@ public final class Board {
             return IntStream.iterate(BOARD_SIZE - 1, i -> i > 0, i -> i - 1)
                             .anyMatch(i -> board[i][i].getMark() == mark);
         }
-    }
-
-    /**
-     * Verifica si el juego se ha ganada y retorna la marca de quién ganó.
-     *
-     * @return marca ganadora (NULL_CHAR si empate)
-     */
-    public char checkWin() {
-        final char winRow = checkRows();
-        final char winCol = checkCols();
-        final char winDiag = checkDiagonals();
-
-        if (winRow != NULL_CHAR) {
-            return winRow;
-        }
-        if (winCol != NULL_CHAR) {
-            return winCol;
-        }
-        if (winDiag != NULL_CHAR) {
-            return winDiag;
-        }
-
-        // retorna (0) si es empate
-        return 0;
     }
 
     /**
