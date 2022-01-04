@@ -10,6 +10,6 @@ public enum Game {
     /**
      * Marcas del juego.
      */
-    static final char X_MARK = 'X';
-    static final char O_MARK = 'O';
+    public static final char X_MARK = 'X';
+    public static final char O_MARK = 'O';
 }
