@@ -3,7 +3,7 @@ package ec.edu.espol.proyecto.game;
 public enum Game {
     ;
     /**
-     * Caracter que simboliza una casilla vacÃ­a.
+     * Caracter que simboliza una casilla vací­a.
      */
     static final char NULL_CHAR = '*';
 

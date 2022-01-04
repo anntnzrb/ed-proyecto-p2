@@ -1,6 +1,8 @@
 package ec.edu.espol.proyecto.controller;
 
 import ec.edu.espol.proyecto.game.Board;
+import static ec.edu.espol.proyecto.game.Game.O_MARK;
+import static ec.edu.espol.proyecto.game.Game.X_MARK;
 import ec.edu.espol.proyecto.game.Player;
 import ec.edu.espol.proyecto.utils.Util;
 import java.io.IOException;
@@ -25,6 +27,9 @@ final public class SecondController implements Initializable{
     private Player player1;
     private Player player2;
     private Board board;
+    private final String markX= Character.toString(X_MARK);
+    private final String markO= Character.toString(O_MARK);
+    
 
     @FXML
     private Button btn1;
@@ -36,13 +41,16 @@ final public class SecondController implements Initializable{
     private Button btn7;
     private Button btn8;
     private Button btn9;
-    private Button btnRegresar;
-    private Button btnMostrar;
-    private Button btnIniciar;
-    private Label lblJugador1;
-    private Label lblJugador2;
-    private Label lblMarca1;
-    private Label lblMarca2;
+   
+    @FXML
+    private Button btnReturn;
+    private Button btnShow;
+   
+    @FXML
+    private Label lblPlayer1;
+    private Label lblPlayer2;
+    private Label lblMark1;
+    private Label lblMark2;
     
     private boolean alternateTurn = false;
     private int counter = 0;
@@ -53,28 +61,28 @@ final public class SecondController implements Initializable{
 
     ArrayList<Button> buttons;
 
-    public void setNombre1(final String nombre1) {
-        lblJugador1.setText(nombre1);
+    public void setName1(final String nombre1) {
+        lblPlayer1.setText(nombre1);
     }
 
-    public void setNombre2(final String nombre2) {
-        lblJugador2.setText(nombre2);
+    public void setName2(final String nombre2) {
+        lblPlayer2.setText(nombre2);
     }
 
-    public void setMarca1(final String marca) {
-        lblMarca1.setText(marca);
+    public void setMark1(final String marca) {
+        lblMark1.setText(marca);
     }
 
-    public void setMarca2(final String marca) {
-        lblMarca2.setText(marca);
+    public void setMark2(final String marca) {
+        lblMark2.setText(marca);
     }
 
-    private void crearJugador() {
-        player1 = new Player(lblJugador1.getText());
-        lblJugador1.setText(String.format(player1.getNickname()));
+    private void createPlayer() {
+        player1 = new Player(lblPlayer1.getText());
+        lblPlayer1.setText(String.format(player1.getNickname()));
         
-        player2 = new Player(lblJugador2.getText());
-        lblJugador2.setText(String.format(player2.getNickname()));
+        player2 = new Player(lblPlayer2.getText());
+        lblPlayer2.setText(String.format(player2.getNickname()));
         
     }
 
@@ -89,30 +97,15 @@ final public class SecondController implements Initializable{
     private void onSalirBtnClick() {
         Platform.exit();
     }
-    
-//    
-//    private void onIniciarBtnClick() {
-//    
-//        crearJugador();
-//       
-//    }
-    
-    @FXML
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        buttons = new ArrayList<>(Arrays.asList(btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9));
 
-        buttons.forEach(button ->{
-            setupButton(button);
-            button.setFocusTraversable(false);
-        });
-    }
-
+    
     @FXML
     void restartGame(ActionEvent event) {
         buttons.forEach(this::resetButton);
         winnerText.setText("Tres en Raya");
     }
-
+    
+    @FXML
     public void resetButton(Button button){
         button.setDisable(false);
         button.setText("");
@@ -128,10 +121,10 @@ final public class SecondController implements Initializable{
 
     public void setPlayerSymbol(Button button){
         if(playerTurn % 2 == 0){
-            button.setText("X");
+            button.setText(markX);
             playerTurn = 1;
         } else{
-            button.setText("O");
+            button.setText(markO);
             playerTurn = 0;
         }
     }
@@ -180,10 +173,10 @@ final public class SecondController implements Initializable{
                 String winnerString = "";
                 if (button.getText().isEmpty()) {
                     if (!alternateTurn) {
-                        button.setText("X");
+                        button.setText(markX);
                         alternateTurn = true;
                     } else {
-                        button.setText("O");
+                        button.setText(markO);
                         alternateTurn = false;
                     }
                     
@@ -208,10 +201,22 @@ final public class SecondController implements Initializable{
                      // second diagonal
                         btn3.getText().equals(winnerString) && btn5.getText().equals(winnerString) && btn7.getText().equals(winnerString)) {
                     winnerText.setText(winnerString + "Wins");
+                    
                 } else if (counter >= 9){
                     winnerText.setText("Draw... ");
                 }
             }
+        });
+    }
+    
+    
+    @FXML
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        buttons = new ArrayList<>(Arrays.asList(btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9));
+
+        buttons.forEach(button ->{
+            setupButton(button);
+            button.setFocusTraversable(false);
         });
     }
    
