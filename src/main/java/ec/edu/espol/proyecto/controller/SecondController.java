@@ -6,31 +6,31 @@ import static ec.edu.espol.proyecto.game.Game.X_MARK;
 import ec.edu.espol.proyecto.game.Player;
 import ec.edu.espol.proyecto.utils.Util;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-final public class SecondController implements Initializable{
+final public class SecondController{
 
     private Stage stage;
     private Player player1;
     private Player player2;
     private Board board;
+    private boolean alternateTurn = false;
+    private int counter = 0;
+    private int playerTurn = 0;
     private final String markX= Character.toString(X_MARK);
     private final String markO= Character.toString(O_MARK);
     
-
+    
     @FXML
     private Button btn1;
     private Button btn2;
@@ -41,7 +41,8 @@ final public class SecondController implements Initializable{
     private Button btn7;
     private Button btn8;
     private Button btn9;
-   
+    ArrayList<Button> buttons;
+    
     @FXML
     private Button btnReturn;
     private Button btnShow;
@@ -51,38 +52,31 @@ final public class SecondController implements Initializable{
     private Label lblPlayer2;
     private Label lblMark1;
     private Label lblMark2;
-    
-    private boolean alternateTurn = false;
-    private int counter = 0;
+
     @FXML
     private Text winnerText;
 
-    private int playerTurn = 0;
-
-    ArrayList<Button> buttons;
-
-    public void setName1(final String nombre1) {
+    public void setName(final String nombre1, final String nombre2) {
         lblPlayer1.setText(nombre1);
-    }
-
-    public void setName2(final String nombre2) {
         lblPlayer2.setText(nombre2);
     }
 
-    public void setMark1(final String marca) {
-        lblMark1.setText(marca);
+    public void setMark(final String marca1, final String marca2) {
+        lblMark1.setText(marca1);
+        lblMark2.setText(marca2);
     }
 
-    public void setMark2(final String marca) {
-        lblMark2.setText(marca);
-    }
-
+   
     private void createPlayer() {
-        player1 = new Player(lblPlayer1.getText());
+        String mark1=lblMark1.getText();
+        player1 = new Player(lblPlayer1.getText(),mark1.charAt(0));
         lblPlayer1.setText(String.format(player1.getNickname()));
+        lblMark1.setText(Character.toString(player1.getMark()));
         
-        player2 = new Player(lblPlayer2.getText());
+        String mark2=lblMark2.getText();
+        player2 = new Player(lblPlayer2.getText(),mark2.charAt(0));
         lblPlayer2.setText(String.format(player2.getNickname()));
+        lblMark2.setText(Character.toString(player2.getMark()));
         
     }
 
@@ -211,7 +205,7 @@ final public class SecondController implements Initializable{
     
     
     @FXML
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize() {
         buttons = new ArrayList<>(Arrays.asList(btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9));
 
         buttons.forEach(button ->{
@@ -219,5 +213,5 @@ final public class SecondController implements Initializable{
             button.setFocusTraversable(false);
         });
     }
-   
+
 }

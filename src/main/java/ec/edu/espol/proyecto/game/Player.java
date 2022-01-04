@@ -4,16 +4,11 @@ public final class Player {
     private String nickname;
     private char   mark;
 
-    /* constructores */
-    private Player() {}
+    /* constructor */
 
     public Player(final String nickname, final char mark) {
         this.nickname = nickname;
         this.mark = mark;
-    }
-
-    public Player(String nickname) {
-        this.nickname = nickname;
     }
 
     /* getters & setters */
