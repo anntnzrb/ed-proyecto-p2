@@ -47,7 +47,7 @@ public final class Tile {
         return mark;
     }
 
-    void setMark(final char mark) {
+    public void setMark(final char mark) {
         this.mark = mark;
     }
 

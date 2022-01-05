@@ -33,6 +33,11 @@ public final class Board {
         fillBoard();
     }
 
+    /* getters & setters */
+    public Tile[][] getBoard() {
+        return board.clone();
+    }
+
     /**
      * Llena el tablero, inicialmente lo llena con el caracter que respresenta
      * casillas vacías (especificado en {@link Tile}).

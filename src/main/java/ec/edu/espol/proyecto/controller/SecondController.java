@@ -2,11 +2,16 @@ package ec.edu.espol.proyecto.controller;
 
 import ec.edu.espol.proyecto.game.Board;
 import ec.edu.espol.proyecto.game.Player;
+import ec.edu.espol.proyecto.game.Tile;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static ec.edu.espol.proyecto.game.Game.O_MARK;
@@ -16,9 +21,10 @@ public final class SecondController {
     private Stage stage;
 
     /* juego */
-    private Board  board;
-    private Player p1;
-    private Player p2;
+    private Board    board;
+    private Tile[][] tbl;
+    private Player   p1;
+    private Player   p2;
 
     @FXML
     private GridPane tableroGP;
@@ -40,10 +46,7 @@ public final class SecondController {
     @FXML
     private void onStartBtnClick() {
         createPlayer();
-        System.out.println(p1.getNickname());
-        System.out.println(p1.getMark());
-        System.out.println(p2.getNickname());
-        System.out.println(p2.getMark());
+        buildBoard();
     }
 
     @FXML
@@ -66,6 +69,26 @@ public final class SecondController {
      */
     private void updateBoard() {
         tableroGP.getChildren().clear();
+        for (int i = 0, row = tbl.length; i < row; ++i) {
+            for (int j = 0, col = tbl[i].length; j < col; ++j) {
+                final StackPane stackPane = new StackPane(new Text("Z"));
+                stasetAlignment(Pos.CENTER);
+
+                final int rowIdx = i;
+                final int colIdx = j;
+                stackPane.setOnMouseClicked(ev -> updateTile(rowIdx, colIdx));
+
+                /* agregar letras al GridPane */
+                GridPane.setMargin(stackPane, new Insets(0, 4, 0, 4));
+                tableroGP.add(stackPane, j, i);
+            }
+        }
+    }
+
+    private void updateTile(final int x, final int y) {
+        // tbl[rowIdx][colIdx].setMark('M');
+        // updateBoard();
+        System.out.println("Hi");
     }
 
     /**
@@ -73,6 +96,8 @@ public final class SecondController {
      */
     private void buildBoard() {
         board = new Board(p1, p2);
+        tbl = board.getBoard();
+        updateBoard();
     }
 
     /**
