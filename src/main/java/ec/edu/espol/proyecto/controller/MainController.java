@@ -37,18 +37,14 @@ public final class MainController {
     @FXML
     private TextField         txtPlayer2;
 
-    /* constructores */
-    private MainController() { }
-
     @FXML
-    private void onBtnEmpezarClick(final ActionEvent ae) throws IOException {
+    private void onBtnStartClick(final ActionEvent ae) throws IOException {
         final FXMLLoader fxmlLoader = Util.getFXMLLoader("second");
         final Parent root = fxmlLoader.load();
         final SecondController secondController = fxmlLoader.getController();
 
-        //Controller.setNombre1(tfJugador1.getText());   
-        //Controller.setNombre2(tfJugador2.getText());
-        //Controller.setMarca1(cbMarca.getValue());
+        secondController.setNames(txtPlayer1.getText(), txtPlayer2.getText());
+        secondController.setPrimaryMark(cbMark.getValue().charAt(0));
 
         stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -56,7 +52,7 @@ public final class MainController {
     }
 
     @FXML
-    private void onSalirBtnClick() {
+    private void onExitBtnClick() {
         Platform.exit();
     }
 
