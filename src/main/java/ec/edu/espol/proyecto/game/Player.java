@@ -28,6 +28,4 @@ public final class Player {
     public void setNickname(final String nickname) {
         this.nickname = nickname;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package ec.edu.espol.proyecto.game;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import static ec.edu.espol.proyecto.game.Game.*;
@@ -33,9 +34,15 @@ public final class Board {
         fillBoard();
     }
 
-    /* getters & setters */
-    public Tile[][] getBoard() {
-        return board.clone();
+    /**
+     * Retorna una celda (@{@link Tile}) a partir de coordenadas dadas.
+     *
+     * @param x coordenada x de la celda
+     * @param y coordenada y de la celda
+     * @return la celda solicitada
+     */
+    public Tile getTile(final int x, final int y) {
+        return board[x][y];
     }
 
     /**
@@ -101,12 +108,7 @@ public final class Board {
         if (winCol != NULL_CHAR) {
             return winCol;
         }
-        if (winDiag != NULL_CHAR) {
-            return winDiag;
-        }
-
-        // retorna (0) si es empate
-        return 0;
+        return winDiag;
     }
 
     /**
@@ -316,7 +318,22 @@ public final class Board {
         return NULL_CHAR;
     }
 
-    public Tile get(final int x, final int y) {
-        return board[x][y];
+    /**
+     * Verifica si el tablero está lleno.
+     * <p>
+     * El tablero estará completo cuando éste no tenga mas marcas de tipo '*'.
+     *
+     * @return {@code true} si el tablero está lleno
+     * {@code false} caso contrario
+     */
+    public boolean isFull() {
+        return Arrays.stream(board)
+                     .flatMap(Arrays::stream)
+                     .noneMatch(tile -> tile.getMark() == NULL_CHAR);
+    }
+
+    /* getters & setters */
+    public Tile[][] getBoard() {
+        return board.clone();
     }
 }

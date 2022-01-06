@@ -3,15 +3,19 @@ package ec.edu.espol.proyecto.controller;
 import ec.edu.espol.proyecto.game.*;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 import static ec.edu.espol.proyecto.game.Game.*;
 
@@ -86,6 +90,9 @@ public final class SecondController {
                               p2.getNickname(), p2.getMark());
         }
         logGameInfo();
+
+        /* deshabilitar botón */
+        btnStart.setDisable(true);
     }
 
     @FXML
@@ -94,8 +101,10 @@ public final class SecondController {
     }
 
     @FXML
-    private void onReturnBtnClick() {
-        Platform.exit();
+    private void onReturnBtnClick(final ActionEvent ae) throws IOException {
+        stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
+        stage.setScene(Util.getNewScene("main"));
+        stage.show();
     }
 
     void setNames(final String name1, final String name2) {
@@ -137,7 +146,7 @@ public final class SecondController {
         tableroGP.getChildren().clear();
         for (int i = 0, row = tbl.length; i < row; ++i) {
             for (int j = 0, col = tbl[i].length; j < col; ++j) {
-                final Tile tile = board.get(i, j);
+                final Tile tile = board.getTile(i, j);
                 final StackPane stackPane = new StackPane(new Text(Character.toString(tile.getMark())));
                 stackPane.setAlignment(Pos.CENTER);
 
@@ -157,9 +166,14 @@ public final class SecondController {
      */
     private void updateTile(final Tile tile) {
         if (tile.getMark() == NULL_CHAR) {
-            tile.setMark('M');
+            tile.setMark(currentMark);
             updateBoard();
-            //board.checkWin();
+
+            if (checkWin(board.checkWin())) {
+                tableroGP.setDisable(true);
+                Util.alert("El juego ha terminado, para jugar denuevo regrese al menú anterior",
+                         true);
+            }
 
             /* actualizar */
             updateGame();
@@ -191,6 +205,43 @@ public final class SecondController {
         } else {
             currentMark = X_MARK;
         }
+    }
+
+    private boolean checkWin(final char mark) {
+        if (board.isFull()) {
+            Util.alert("Este juego ha terminado en empate", true);
+            return true;
+        }
+
+        final boolean isAI = gameMode == GameMode.AI;
+        if (mark == X_MARK) {
+            if (isAI) {
+                Util.alert(ai.getMark() == X_MARK
+                           ? "Ha ganado la marca 'X' (Computador)"
+                           : String.format("Ha ganado la marca 'X' (%s)", p1.getNickname()), true);
+            } else {
+                Util.alert(p1.getMark() == X_MARK
+                           ? String.format("Ha ganado la marca 'X' (%s)", p1.getNickname())
+                           : String.format("Ha ganado la marca 'X' (%s)", p2.getNickname()), true);
+            }
+
+            return true;
+        }
+        if (mark == O_MARK) {
+            if (isAI) {
+                Util.alert(ai.getMark() == O_MARK
+                           ? "Ha ganado la marca 'O' (Computador)"
+                           : String.format("Ha ganado la marca 'O' (%s)", p1.getNickname()), true);
+            } else {
+                Util.alert(p1.getMark() == O_MARK
+                           ? String.format("Ha ganado la marca 'O' (%s)", p1.getNickname())
+                           : String.format("Ha ganado la marca 'O' (%s)", p2.getNickname()), true);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
