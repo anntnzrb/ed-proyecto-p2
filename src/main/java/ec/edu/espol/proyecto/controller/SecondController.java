@@ -1,8 +1,7 @@
 package ec.edu.espol.proyecto.controller;
 
-import ec.edu.espol.proyecto.game.Board;
-import ec.edu.espol.proyecto.game.Player;
-import ec.edu.espol.proyecto.game.Tile;
+import ec.edu.espol.proyecto.game.*;
+import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -24,7 +23,10 @@ public final class SecondController {
     private Tile[][] tbl;
     private Player   p1;
     private Player   p2;
+    private AI       ai;
     private int      roundNum;
+    private GameMode gameMode;
+    private char     currentMark;
 
     @FXML
     private GridPane tableroGP;
@@ -42,18 +44,48 @@ public final class SecondController {
     private Label    lblMarkPlayer1;
     @FXML
     private Label    lblMarkPlayer2;
+    @FXML
+    private Label    lblTurn;
+    @FXML
+    private Label    lblRound;
+
+    @FXML
+    public void initialize() {
+        /* se inicializa el juego desde la ronda 1 */
+        roundNum = 1;
+    }
 
     @FXML
     private void onStartBtnClick() {
-        createPlayer();
+        /* al iniciar la partida se crea el jugador (humano) */
+        p1 = new Player(lblNamePlayer1.getText(), lblMarkPlayer1.getText().charAt(0));
+
+        /*
+         * si se juega contra la máquina, crear un objeto AI, caso contrario,
+         *  otro humano.
+         */
+        if (gameMode == GameMode.AI) {
+            ai = new AI();
+            p2 = new Player();
+        } else {
+            p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
+        }
+
+        updateGameInfo();
         buildBoard();
 
         /* debug */
+        System.out.printf("\nSe ha inicializado un juego juego con la modalidad: '%s'\n",
+                          gameMode);
         System.out.printf("El jugador #1 (%s) usa la marca '%s'\n",
                           p1.getNickname(), p1.getMark());
-        System.out.printf("El jugador #2 (%s) usa la marca '%s'\n",
-                          p2.getNickname(), p2.getMark());
-        logRound();
+        if (gameMode == GameMode.AI) {
+            System.out.printf("El computador usa la marca '%s'\n", ai.getMark());
+        } else {
+            System.out.printf("El jugador #2 (%s) usa la marca '%s'\n",
+                              p2.getNickname(), p2.getMark());
+        }
+        logGameInfo();
     }
 
     @FXML
@@ -81,8 +113,25 @@ public final class SecondController {
         }
     }
 
+    void setInitMark(final String mark) {
+        currentMark = mark.charAt(0);
+    }
+
+    void setGameMode(final GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
     /**
-     * Método encargado de crear & actualizar el {@link Board}.
+     * Arma el tablero a partir de parámetros específicos.
+     */
+    private void buildBoard() {
+        board = new Board(p1, p2);
+        tbl = board.getBoard();
+        updateBoard();
+    }
+
+    /**
+     * Método encargado de crear & actualizar el tablero {@link Board}.
      */
     private void updateBoard() {
         tableroGP.getChildren().clear();
@@ -101,44 +150,55 @@ public final class SecondController {
         }
     }
 
+    /**
+     * Actualiza (modifica) una celda (@{@link Tile}) del tablero (@{@link Board}).
+     *
+     * @param tile celda a modificar
+     */
     private void updateTile(final Tile tile) {
         if (tile.getMark() == NULL_CHAR) {
             tile.setMark('M');
             updateBoard();
             //board.checkWin();
-            ++roundNum;
-            logRound();
+
+            /* actualizar */
+            updateGame();
+        } else {
+            Util.alert("No puedes colocar una marca en una celda que ya esté marcada previamente.",
+                       true);
+        }
+    }
+
+    /* ************************************************************************
+     * métodos de actualización del juego
+     * ********************************************************************* */
+
+    private void updateGame() {
+        ++roundNum;
+        updateNextMark();
+        updateGameInfo();
+        logGameInfo();
+    }
+
+    private void updateGameInfo() {
+        lblRound.setText(String.valueOf(roundNum));
+        lblTurn.setText(String.valueOf(currentMark));
+    }
+
+    private void updateNextMark() {
+        if (currentMark == X_MARK) {
+            currentMark = O_MARK;
+        } else {
+            currentMark = X_MARK;
         }
     }
 
     /**
-     * Arma el tablero a partir de parámetros específicos.
+     * Muestra en pantalla el estado actual del juego.
      */
-    private void buildBoard() {
-        board = new Board(p1, p2);
-        tbl = board.getBoard();
-        updateBoard();
-    }
-
-    /**
-     * Método encargado de crear el {@link Player} del {@link Board}.
-     */
-    private void createPlayer() {
-        p1 = new Player(lblNamePlayer1.getText(), lblMarkPlayer1.getText().charAt(0));
-        p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
-    }
-
-    private int logRound() {
+    private void logGameInfo() {
         System.out.printf(roundNum == 0
-                          ? "\nEmpezando juego... (ronda #%d)\n"
-                          : "\nAvanzando a la siguiente ronda... (ronda #%d)\n", roundNum);
-
-        return roundNum;
-    }
-
-    @FXML
-    public void initialize() {
-        /* se inicializa el juego desde la ronda 0 */
-        roundNum = 0;
+                          ? "\nEmpezando juego... (ronda #%d) [%s]\n"
+                          : "\nAvanzando a la siguiente ronda... (ronda #%d) [%s]\n", roundNum, currentMark);
     }
 }

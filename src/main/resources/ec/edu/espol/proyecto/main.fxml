@@ -44,6 +44,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.MainController">
    <children>
@@ -68,12 +69,12 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="154.0" layoutY="220.0" text="Modo de juego:">
+            <Label layoutX="158.0" layoutY="270.0" text="Modo de juego:">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="154.0" layoutY="290.0" text="Marca jugador #1:">
+            <Label layoutX="472.0" layoutY="88.0" text="Marca:">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -83,19 +84,19 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="126.0" layoutY="372.0" text="¿Quién inicia el juego?">
+            <Label layoutX="148.0" layoutY="334.0" text="¿Quién inicia el juego?">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnStart" layoutX="273.0" layoutY="452.0" mnemonicParsing="false" onAction="#onBtnStartClick" text="Empezar">
+            <Button fx:id="btnStart" layoutX="277.0" layoutY="378.0" mnemonicParsing="false" onAction="#onBtnStartClick" text="Empezar">
                <font>
                   <Font name="System Bold Italic" size="16.0" />
                </font>
             </Button>
-            <ChoiceBox fx:id="cbGameMode" layoutX="312.0" layoutY="220.0" prefWidth="180.0" />
-            <ChoiceBox fx:id="cbMark" layoutX="312.0" layoutY="290.0" prefWidth="56.0" />
-            <ChoiceBox fx:id="cbInitPlayer" layoutX="312.0" layoutY="372.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="cbGameMode" layoutX="316.0" layoutY="270.0" prefHeight="24.0" prefWidth="80.0" />
+            <ChoiceBox fx:id="cbMark" layoutX="472.0" layoutY="112.0" prefWidth="56.0" />
+            <ChoiceBox fx:id="cbInitMark" layoutX="334.0" layoutY="334.0" prefHeight="24.0" prefWidth="92.0" />
             <TextField fx:id="txtPlayer1" layoutX="312.0" layoutY="112.0" prefWidth="150.0" />
             <TextField fx:id="txtPlayer2" layoutX="312.0" layoutY="152.0" prefWidth="150.0" />
             <Label layoutX="148.0" layoutY="14.0" text="TRES EN RAYA" textFill="#070707">
@@ -103,6 +104,7 @@
                   <Font name="System Bold Italic" size="43.0" />
                </font>
             </Label>
+            <Text layoutX="158.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* Ignorar Jugador #2 si se juega contra computador" />
          </children>
       </AnchorPane>
    </children>
