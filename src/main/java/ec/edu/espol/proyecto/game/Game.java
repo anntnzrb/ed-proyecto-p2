@@ -5,7 +5,7 @@ public enum Game {
     /**
      * Caracter que simboliza una casilla vacía.
      */
-    static final char NULL_CHAR = '*';
+    public static final char NULL_CHAR = '*';
 
     /**
      * Marcas del juego.

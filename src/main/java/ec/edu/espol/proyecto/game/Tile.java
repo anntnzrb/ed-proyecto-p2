@@ -43,7 +43,7 @@ public final class Tile {
         this.y = y;
     }
 
-    char getMark() {
+    public char getMark() {
         return mark;
     }
 

@@ -14,8 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import static ec.edu.espol.proyecto.game.Game.O_MARK;
-import static ec.edu.espol.proyecto.game.Game.X_MARK;
+import static ec.edu.espol.proyecto.game.Game.*;
 
 public final class SecondController {
     private Stage stage;
@@ -25,6 +24,7 @@ public final class SecondController {
     private Tile[][] tbl;
     private Player   p1;
     private Player   p2;
+    private int      roundNum;
 
     @FXML
     private GridPane tableroGP;
@@ -47,6 +47,13 @@ public final class SecondController {
     private void onStartBtnClick() {
         createPlayer();
         buildBoard();
+
+        /* debug */
+        System.out.printf("El jugador #1 (%s) usa la marca '%s'\n",
+                          p1.getNickname(), p1.getMark());
+        System.out.printf("El jugador #2 (%s) usa la marca '%s'\n",
+                          p2.getNickname(), p2.getMark());
+        logRound();
     }
 
     @FXML
@@ -64,6 +71,16 @@ public final class SecondController {
         lblNamePlayer2.setText(name2);
     }
 
+    void setPrimaryMark(final char mark) {
+        if (mark == X_MARK) {
+            lblMarkPlayer1.setText(Character.toString(X_MARK));
+            lblMarkPlayer2.setText(Character.toString(O_MARK));
+        } else {
+            lblMarkPlayer1.setText(Character.toString(O_MARK));
+            lblMarkPlayer2.setText(Character.toString(X_MARK));
+        }
+    }
+
     /**
      * Método encargado de crear & actualizar el {@link Board}.
      */
@@ -71,12 +88,11 @@ public final class SecondController {
         tableroGP.getChildren().clear();
         for (int i = 0, row = tbl.length; i < row; ++i) {
             for (int j = 0, col = tbl[i].length; j < col; ++j) {
-                final StackPane stackPane = new StackPane(new Text("Z"));
-                stasetAlignment(Pos.CENTER);
+                final Tile tile = board.get(i, j);
+                final StackPane stackPane = new StackPane(new Text(Character.toString(tile.getMark())));
+                stackPane.setAlignment(Pos.CENTER);
 
-                final int rowIdx = i;
-                final int colIdx = j;
-                stackPane.setOnMouseClicked(ev -> updateTile(rowIdx, colIdx));
+                stackPane.setOnMouseClicked(ev -> updateTile(tile));
 
                 /* agregar letras al GridPane */
                 GridPane.setMargin(stackPane, new Insets(0, 4, 0, 4));
@@ -85,10 +101,14 @@ public final class SecondController {
         }
     }
 
-    private void updateTile(final int x, final int y) {
-        // tbl[rowIdx][colIdx].setMark('M');
-        // updateBoard();
-        System.out.println("Hi");
+    private void updateTile(final Tile tile) {
+        if (tile.getMark() == NULL_CHAR) {
+            tile.setMark('M');
+            updateBoard();
+            //board.checkWin();
+            ++roundNum;
+            logRound();
+        }
     }
 
     /**
@@ -108,18 +128,17 @@ public final class SecondController {
         p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
     }
 
-    @FXML
-    public void initialize() {
+    private int logRound() {
+        System.out.printf(roundNum == 0
+                          ? "\nEmpezando juego... (ronda #%d)\n"
+                          : "\nAvanzando a la siguiente ronda... (ronda #%d)\n", roundNum);
 
+        return roundNum;
     }
 
-    void setPrimaryMark(final char mark) {
-        if (mark == X_MARK) {
-            lblMarkPlayer1.setText(Character.toString(X_MARK));
-            lblMarkPlayer2.setText(Character.toString(O_MARK));
-        } else {
-            lblMarkPlayer1.setText(Character.toString(O_MARK));
-            lblMarkPlayer2.setText(Character.toString(X_MARK));
-        }
+    @FXML
+    public void initialize() {
+        /* se inicializa el juego desde la ronda 0 */
+        roundNum = 0;
     }
 }

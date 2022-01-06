@@ -315,4 +315,8 @@ public final class Board {
 
         return NULL_CHAR;
     }
+
+    public Tile get(final int x, final int y) {
+        return board[x][y];
+    }
 }
