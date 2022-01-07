@@ -1,5 +1,6 @@
 package ec.edu.espol.proyecto.ds;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +8,14 @@ import java.util.List;
 public final class Tree<E> {
 
     private TreeNode<E> root;
+
+    public TreeNode<E> getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeNode<E> root) {
+        this.root = root;
+    }
 
     public boolean existe(E clave) {
         TreeNode<E> nodo = buscarNodo(clave, this);
@@ -46,14 +55,14 @@ public final class Tree<E> {
         return lData;
     }
 
-    private static final class TreeNode<E> {
+    public static final class TreeNode<E> {
 
         private E data;
         private List<Tree<E>> children;
+        
 
+        
         /* constructores */
-        public TreeNode() {
-        }
 
         public TreeNode(final E data) {
             this.data = data;
@@ -68,5 +77,11 @@ public final class Tree<E> {
         public List<Tree<E>> getChildren() {
             return children;
         }
+        
+        
+        
     }
+    
+    
+    
 }

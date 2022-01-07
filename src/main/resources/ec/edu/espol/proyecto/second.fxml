@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.SecondController">
+<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.SecondController">
    <children>
       <MenuBar>
         <menus>
@@ -42,7 +42,7 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="btnShowTree" layoutX="476.0" layoutY="465.0" mnemonicParsing="false" text="Mostrar árbol">
+            <Button fx:id="btnShowTree" layoutX="476.0" layoutY="465.0" mnemonicParsing="false" onAction="#onTreeShowBtnClick" text="Mostrar árbol">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>

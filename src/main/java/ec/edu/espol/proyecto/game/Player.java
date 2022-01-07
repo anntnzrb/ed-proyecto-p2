@@ -5,6 +5,7 @@ import static ec.edu.espol.proyecto.game.Game.NULL_CHAR;
 public final class Player {
     private       String nickname;
     private final char   mark;
+    private boolean turno;
 
     /* constructores */
     public Player(final String nickname, final char mark) {
@@ -27,5 +28,13 @@ public final class Player {
 
     public void setNickname(final String nickname) {
         this.nickname = nickname;
+    }
+    
+    public boolean isTurno() {
+        return turno;
+    }
+
+    public void setTurno(boolean turno) {
+        this.turno = turno;
     }
 }

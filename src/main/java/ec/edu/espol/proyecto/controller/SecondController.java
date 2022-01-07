@@ -1,6 +1,7 @@
 package ec.edu.espol.proyecto.controller;
 
 import ec.edu.espol.proyecto.ds.Tree;
+import ec.edu.espol.proyecto.ds.Tree.TreeNode;
 import ec.edu.espol.proyecto.game.*;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
@@ -19,14 +20,25 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static ec.edu.espol.proyecto.game.Game.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public final class SecondController {
     private Stage stage;
     private Tree<Board> arbolTablaJuego;
+    private Board tableroActual;
     private boolean terminado;
+    private BorderPane rootJuego;
 
     /* juego */
     private Board    board;
@@ -59,6 +71,9 @@ public final class SecondController {
     @FXML
     private Label    lblRound;
 
+    VBox supraBox = new VBox();
+    boolean contadorTurno = true;
+    
     @FXML
     public void initialize() {
         /* se inicializa el juego desde la ronda 1 */
@@ -100,6 +115,30 @@ public final class SecondController {
         /* deshabilitar botón */
         btnStart.setDisable(true);
     }
+    
+////////////////////////////////////////////////////////////////////////////////   
+    @FXML
+    public void onTreeShowBtnClick() {
+        btnShowTree.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //VBox panela = supraBox;
+                VBox panela = new VBox();
+                panela.setSpacing(10);
+                ObservableList penal = panela.getChildren();
+                //Label c = tablerolabel(a);
+                //c.setStyle("-fx-background-color: aqua;");
+                //penal.addAll(c);
+                Stage sta = new Stage();
+                panela.setStyle("-fx-background-color: BEIGE;");
+                Scene escena = new Scene(panela, 500, 500);
+                sta.setScene(escena);
+                sta.show();
+                btnShowTree.setVisible(false);
+            }
+        });
+    }
+    
 
        private Tile moveMachine(){
         Tile c = null;
@@ -120,7 +159,47 @@ public final class SecondController {
         updateTile(c);
         return c;
     }
-     
+       
+        private void hiloPC(Player jugador){        
+        Thread tr = new Thread(()->{
+            while(!this.terminado){
+                System.out.print("");    
+                if(!this.terminado && jugador.isTurno()){
+                    esperar(5);
+                    if(tableroActual.checkWin()== this.board.checkWin()){                        
+                        System.out.println(jugador.getNickname()+"  "+jugador.isTurno());
+                        //tableroActual.setJugador(jugador);                        
+                        Tile c = moveMachine();
+                        if(c!=null){
+                            HBox fila = ((HBox)((VBox)this.rootJuego.getCenter()).getChildren().get(c.getX()));
+                            StackPane st = (StackPane)fila.getChildren().get(c.getY());
+                            Platform.runLater(()->{
+                            st.fireEvent(new MouseEvent(MouseEvent.MOUSE_CLICKED, st.getLayoutX(), st.getLayoutY(), st.getLayoutX(), st.getLayoutY(), MouseButton.PRIMARY, 
+                                1,true, true, true, true, true, true, true, true, true, true, null));                            
+                        }); 
+                        }
+                         
+                    }   
+                    esperar(5);    
+                }              
+            }
+        });
+        tr.setDaemon(true);
+        tr.start();
+    }
+        
+        
+        private void esperar(int mill) {
+        try {
+            Thread.sleep(mill * 100);
+        } catch (InterruptedException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+       
+       
+////////////////////////////////////////////////////////////////////////////////
+       
     
     @FXML
     private void onExitBtnClick() {
