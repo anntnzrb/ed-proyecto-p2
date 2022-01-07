@@ -13,7 +13,7 @@ public final class Tile {
     /* constructores */
     private Tile() {}
 
-    private Tile(final int x, final int y, final char mark) {
+    Tile(int x, int y,char mark) {
         this.x = x;
         this.y = y;
         this.mark = mark;
@@ -25,6 +25,8 @@ public final class Tile {
     Tile(final int x, final int y) {
         this(x, y, NULL_CHAR);
     }
+
+    
 
     /* getters & setters */
     public int getX() {

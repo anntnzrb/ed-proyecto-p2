@@ -1,5 +1,6 @@
 package ec.edu.espol.proyecto.controller;
 
+import ec.edu.espol.proyecto.ds.Tree;
 import ec.edu.espol.proyecto.game.*;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
@@ -18,9 +19,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static ec.edu.espol.proyecto.game.Game.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public final class SecondController {
     private Stage stage;
+    private Tree<Board> arbolTablaJuego;
+    private boolean terminado;
 
     /* juego */
     private Board    board;
@@ -95,6 +101,27 @@ public final class SecondController {
         btnStart.setDisable(true);
     }
 
+       private Tile moveMachine(){
+        Tile c = null;
+        List<Board> listRecomendado = this.arbolTablaJuego.getUtilidadMax(board);
+        List<Board> opciones = new LinkedList<>();
+        listRecomendado.forEach(e->{
+            board.showBoard();
+            //System.out.println("UILIDAD: "+board.utilityBoard(p2.getMark()));
+        });
+        listRecomendado.stream().filter((e) -> 
+                (e.utilityBoard(p2.getMark())==listRecomendado.get(listRecomendado.size()-1).utilityBoard(p2.getMark()))).forEachOrdered((e) -> {
+            opciones.add(e);   
+        });
+        Collections.shuffle(opciones);
+        if(!opciones.isEmpty())
+            return this.board.obtenerCasilla(opciones.get(0));        
+        
+        updateTile(c);
+        return c;
+    }
+     
+    
     @FXML
     private void onExitBtnClick() {
         Platform.exit();

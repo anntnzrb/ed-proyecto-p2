@@ -45,6 +45,10 @@ public final class Board {
         return board[x][y];
     }
 
+    public int getBOARD_SIZE() {
+        return BOARD_SIZE;
+    }
+
     /**
      * Llena el tablero, inicialmente lo llena con el caracter que respresenta
      * casillas vacías (especificado en {@link Tile}).
@@ -75,6 +79,14 @@ public final class Board {
         }
 
         return board.clone();
+    }
+    
+     public void copiarTablero(Board tabla){
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                this.board[i][j] = new Tile(i,j,tabla.board[i][j].getMark());
+            }
+        }        
     }
 
     /**
@@ -335,5 +347,19 @@ public final class Board {
     /* getters & setters */
     public Tile[][] getBoard() {
         return board.clone();
+    }
+    
+    
+    public Tile obtenerCasilla(Board recomendado){
+        Tile c = null;
+        if(recomendado!=null){
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
+                    if(recomendado.board[i][j].getMark()!=this.board[i][j].getMark())
+                        c = new Tile(i,j,recomendado.board[i][j].getMark());
+                }
+            }    
+        }        
+        return c;
     }
 }
