@@ -1,11 +1,14 @@
 package ec.edu.espol.proyecto.game;
 
-import ec.edu.espol.proyecto.ds.Tree;
-import ec.edu.espol.proyecto.ds.Tree.TreeNode;
-import java.util.ArrayList;
-
 public class AI {
+    private final char   mark;    
+    
     public char getMark() {
         return 0;
     }
+
+    public AI(char mark) {
+        this.mark = mark;
+    }
+
 }

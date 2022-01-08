@@ -1,7 +1,6 @@
 package ec.edu.espol.proyecto.controller;
 
 import ec.edu.espol.proyecto.ds.Tree;
-import ec.edu.espol.proyecto.ds.Tree.TreeNode;
 import ec.edu.espol.proyecto.game.*;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
@@ -16,28 +15,21 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-
 import static ec.edu.espol.proyecto.game.Game.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public final class SecondController {
     private Stage stage;
     private Tree<Board> arbolTablaJuego;
     private Board tableroActual;
-    private boolean terminado;
     private BorderPane rootJuego;
 
     /* juego */
@@ -70,9 +62,6 @@ public final class SecondController {
     private Label    lblTurn;
     @FXML
     private Label    lblRound;
-
-    VBox supraBox = new VBox();
-    boolean contadorTurno = true;
     
     @FXML
     public void initialize() {
@@ -90,8 +79,8 @@ public final class SecondController {
          *  otro humano.
          */
         if (gameMode == GameMode.AI) {
-            ai = new AI();
-            p2 = new Player();
+            p2 = new Player("PC", lblMarkPlayer2.getText().charAt(0));
+             hiloPC(p2);
         } else {
             p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
         }
@@ -105,7 +94,8 @@ public final class SecondController {
         System.out.printf("El jugador #1 (%s) usa la marca '%s'\n",
                           p1.getNickname(), p1.getMark());
         if (gameMode == GameMode.AI) {
-            System.out.printf("El computador usa la marca '%s'\n", ai.getMark());
+            System.out.printf("El computador usa la marca '%s'\n", p2.getMark());
+           
         } else {
             System.out.printf("El jugador #2 (%s) usa la marca '%s'\n",
                               p2.getNickname(), p2.getMark());
@@ -121,17 +111,16 @@ public final class SecondController {
     public void onTreeShowBtnClick() {
         btnShowTree.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {
-                //VBox panela = supraBox;
-                VBox panela = new VBox();
-                panela.setSpacing(10);
-                ObservableList penal = panela.getChildren();
+            public void handle(ActionEvent event) {              
+                VBox panel = new VBox();
+                panel.setSpacing(10);
+                ObservableList fondo = panel.getChildren();
                 //Label c = tablerolabel(a);
                 //c.setStyle("-fx-background-color: aqua;");
                 //penal.addAll(c);
                 Stage sta = new Stage();
-                panela.setStyle("-fx-background-color: BEIGE;");
-                Scene escena = new Scene(panela, 500, 500);
+                panel.setStyle("-fx-background-color: BEIGE;");
+                Scene escena = new Scene(panel, 500, 500);
                 sta.setScene(escena);
                 sta.show();
                 btnShowTree.setVisible(false);
@@ -162,23 +151,16 @@ public final class SecondController {
        
         private void hiloPC(Player jugador){        
         Thread tr = new Thread(()->{
-            while(!this.terminado){
-                System.out.print("");    
-                if(!this.terminado && jugador.isTurno()){
+            while(checkWin(jugador.getMark())){
+                
+                if(checkWin(jugador.getMark()) && jugador.getMark()==currentMark){
                     esperar(5);
                     if(tableroActual.checkWin()== this.board.checkWin()){                        
-                        System.out.println(jugador.getNickname()+"  "+jugador.isTurno());
-                        //tableroActual.setJugador(jugador);                        
+                        System.out.println(jugador.getNickname()+"  ");                       
                         Tile c = moveMachine();
                         if(c!=null){
-                            HBox fila = ((HBox)((VBox)this.rootJuego.getCenter()).getChildren().get(c.getX()));
-                            StackPane st = (StackPane)fila.getChildren().get(c.getY());
-                            Platform.runLater(()->{
-                            st.fireEvent(new MouseEvent(MouseEvent.MOUSE_CLICKED, st.getLayoutX(), st.getLayoutY(), st.getLayoutX(), st.getLayoutY(), MouseButton.PRIMARY, 
-                                1,true, true, true, true, true, true, true, true, true, true, null));                            
-                        }); 
-                        }
-                         
+                          updateBoard();                                            
+                        }   
                     }   
                     esperar(5);    
                 }              
