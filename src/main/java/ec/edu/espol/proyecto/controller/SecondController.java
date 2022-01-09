@@ -79,8 +79,8 @@ public final class SecondController {
          *  otro humano.
          */
         if (gameMode == GameMode.AI) {
-            p2 = new Player("PC", lblMarkPlayer2.getText().charAt(0));
-            hiloPC(p2);           
+            p2 = new Player("PC", lblMarkPlayer2.getText().charAt(0));          
+                       
         } else {
             p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
         }
@@ -130,9 +130,9 @@ public final class SecondController {
         Tile c = null;
         List<Board> listRecomendado = this.arbolTablaJuego.getUtilidadMax(board);
         List<Board> opciones = new LinkedList<>();
-        listRecomendado.forEach(e->{
-            e.showBoard();
-        });
+//        listRecomendado.forEach(e->{
+//            e.showBoard();
+//        });
         listRecomendado.stream().filter((e) -> 
                 (e.utilityBoard(p2.getMark())==listRecomendado.get(listRecomendado.size()-1).utilityBoard(p2.getMark()))).forEachOrdered((e) -> {
             opciones.add(e);   
@@ -140,26 +140,23 @@ public final class SecondController {
         Collections.shuffle(opciones);
         if(!opciones.isEmpty())
             return this.board.obtenerCasilla(opciones.get(0));        
-        
+       
         return c;
     }
       
        
-    private void hiloPC(Player jugador) {
-        Thread tr = new Thread(() -> {
-            while (!checkWin(jugador.getMark())) {
-                if (jugador.getMark() == currentMark) {
-                    esperar(5);
+    private void PC() {    
+            while (!checkWin(p2.getMark())) {
+                if (p2.getMark() == currentMark) {           
                     Tile c = moveMachine();
                     if (c != null) {
                         updateTile(c);
                     }
                 }
-                esperar(5);
+              
             }
-        });
-        tr.setDaemon(true);
-        tr.start();
+        ;
+       
     }
 
     private void esperar(int mill) {
@@ -229,7 +226,14 @@ public final class SecondController {
                 final StackPane stackPane = new StackPane(new Text(Character.toString(tile.getMark())));
                 stackPane.setAlignment(Pos.CENTER);
 
-                stackPane.setOnMouseClicked(ev -> updateTile(tile));
+                stackPane.setOnMouseClicked(ev ->{
+                    
+                      if (gameMode==GameMode.AI){
+                          updateTile(moveMachine());
+                      }else {
+                          updateTile(tile);
+                      }
+                        });
 
                 /* agregar letras al GridPane */
                 GridPane.setMargin(stackPane, new Insets(0, 4, 0, 4));
@@ -243,7 +247,7 @@ public final class SecondController {
      *
      * @param tile celda a modificar
      */
-    private void updateTile(final Tile tile) {
+    private void updateTile(final Tile tile) {       
         if (tile.getMark() == NULL_CHAR) {
             tile.setMark(currentMark);
             updateBoard();

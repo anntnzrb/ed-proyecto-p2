@@ -45,7 +45,7 @@ public final class Tree<E> {
         n.getChildren().forEach((nd) -> {
             lData.add(nd.getData());
         });
-        Collections.sort((List) lData);
+        Collections.sort((List)lData);
         return lData;
     }
 
