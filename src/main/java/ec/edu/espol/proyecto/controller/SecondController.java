@@ -80,7 +80,7 @@ public final class SecondController {
          */
         if (gameMode == GameMode.AI) {
             p2 = new Player("PC", lblMarkPlayer2.getText().charAt(0));
-             hiloPC(p2);
+            hiloPC(p2);           
         } else {
             p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
         }
@@ -115,9 +115,6 @@ public final class SecondController {
                 VBox panel = new VBox();
                 panel.setSpacing(10);
                 ObservableList fondo = panel.getChildren();
-                //Label c = tablerolabel(a);
-                //c.setStyle("-fx-background-color: aqua;");
-                //penal.addAll(c);
                 Stage sta = new Stage();
                 panel.setStyle("-fx-background-color: BEIGE;");
                 Scene escena = new Scene(panel, 500, 500);
@@ -129,13 +126,12 @@ public final class SecondController {
     }
     
 
-       private Tile moveMachine(){
+    private Tile moveMachine(){
         Tile c = null;
         List<Board> listRecomendado = this.arbolTablaJuego.getUtilidadMax(board);
         List<Board> opciones = new LinkedList<>();
         listRecomendado.forEach(e->{
-            board.showBoard();
-            //System.out.println("UILIDAD: "+board.utilityBoard(p2.getMark()));
+            e.showBoard();
         });
         listRecomendado.stream().filter((e) -> 
                 (e.utilityBoard(p2.getMark())==listRecomendado.get(listRecomendado.size()-1).utilityBoard(p2.getMark()))).forEachOrdered((e) -> {
@@ -145,40 +141,35 @@ public final class SecondController {
         if(!opciones.isEmpty())
             return this.board.obtenerCasilla(opciones.get(0));        
         
-        updateTile(c);
         return c;
     }
+      
        
-        private void hiloPC(Player jugador){        
-        Thread tr = new Thread(()->{
-            while(checkWin(jugador.getMark())){
-                
-                if(checkWin(jugador.getMark()) && jugador.getMark()==currentMark){
+    private void hiloPC(Player jugador) {
+        Thread tr = new Thread(() -> {
+            while (!checkWin(jugador.getMark())) {
+                if (jugador.getMark() == currentMark) {
                     esperar(5);
-                    if(tableroActual.checkWin()== this.board.checkWin()){                        
-                        System.out.println(jugador.getNickname()+"  ");                       
-                        Tile c = moveMachine();
-                        if(c!=null){
-                          updateBoard();                                            
-                        }   
-                    }   
-                    esperar(5);    
-                }              
+                    Tile c = moveMachine();
+                    if (c != null) {
+                        updateTile(c);
+                    }
+                }
+                esperar(5);
             }
         });
         tr.setDaemon(true);
         tr.start();
     }
-        
-        
-        private void esperar(int mill) {
+
+    private void esperar(int mill) {
         try {
             Thread.sleep(mill * 100);
         } catch (InterruptedException ex) {
             System.out.println(ex.getMessage());
         }
     }
-       
+
        
 ////////////////////////////////////////////////////////////////////////////////
        
@@ -304,7 +295,7 @@ public final class SecondController {
         final boolean isAI = gameMode == GameMode.AI;
         if (mark == X_MARK) {
             if (isAI) {
-                Util.alert(ai.getMark() == X_MARK
+                Util.alert(p2.getMark() == X_MARK
                            ? "Ha ganado la marca 'X' (Computador)"
                            : String.format("Ha ganado la marca 'X' (%s)", p1.getNickname()), true);
             } else {
@@ -317,7 +308,7 @@ public final class SecondController {
         }
         if (mark == O_MARK) {
             if (isAI) {
-                Util.alert(ai.getMark() == O_MARK
+                Util.alert(p2.getMark() == O_MARK
                            ? "Ha ganado la marca 'O' (Computador)"
                            : String.format("Ha ganado la marca 'O' (%s)", p1.getNickname()), true);
             } else {

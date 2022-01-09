@@ -350,13 +350,13 @@ public final class Board {
     }
     
     
-    public Tile obtenerCasilla(Board recomendado){
+    public Tile obtenerCasilla(Board tabla){
         Tile c = null;
-        if(recomendado!=null){
+        if(tabla!=null){
             for (int i = 0; i < BOARD_SIZE; i++) {
                 for (int j = 0; j < BOARD_SIZE; j++) {
-                    if(recomendado.board[i][j].getMark()!=this.board[i][j].getMark())
-                        c = new Tile(i,j,recomendado.board[i][j].getMark());
+                    if(tabla.board[i][j].getMark()!=this.board[i][j].getMark())
+                        c = new Tile(i,j,tabla.board[i][j].getMark());
                 }
             }    
         }        

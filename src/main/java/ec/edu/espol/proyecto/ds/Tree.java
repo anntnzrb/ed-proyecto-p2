@@ -17,23 +17,17 @@ public final class Tree<E> {
         this.root = root;
     }
 
-    public boolean existe(E clave) {
-        TreeNode<E> nodo = buscarNodo(clave, this);
-        return nodo != null;
-    }
-
-
     public TreeNode<E> buscarNodo(E data) {
-        return buscarNodo(data, this);
+        return buscarNodo(data, root);
     }
 
-    private TreeNode<E> buscarNodo(E data, Tree<E> n) {
-        if (n.root.data == null) {
-            return n.root;
-        } else if ((n.root.data).equals(data)) {
-            return n.root;
+    private TreeNode<E> buscarNodo(E data, TreeNode<E> n) {
+        if (n == null) {
+            return n;
+        } else if ((n.data).equals(data)) {
+            return n;
         }
-        for (Tree<E> nod : n.root.getChildren()) {
+        for (TreeNode<E> nod : n.getChildren()) {
             TreeNode<E> nL = buscarNodo(data, nod);
             if (nL != null) {
                 return nL;
@@ -49,7 +43,7 @@ public final class Tree<E> {
         }
         List<E> lData = new LinkedList<>();
         n.getChildren().forEach((nd) -> {
-            lData.add(nd.root.getData());
+            lData.add(nd.getData());
         });
         Collections.sort((List) lData);
         return lData;
@@ -58,9 +52,7 @@ public final class Tree<E> {
     public static final class TreeNode<E> {
 
         private E data;
-        private List<Tree<E>> children;
-        
-
+        private List<TreeNode<E>> children;
         
         /* constructores */
 
@@ -74,7 +66,7 @@ public final class Tree<E> {
             return data;
         }
 
-        public List<Tree<E>> getChildren() {
+        public List<TreeNode<E>> getChildren() {
             return children;
         }
         
