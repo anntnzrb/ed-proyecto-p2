@@ -21,11 +21,10 @@ import static ec.edu.espol.proyecto.game.Game.O_MARK;
 import static ec.edu.espol.proyecto.game.Game.X_MARK;
 
 public final class MainController {
-    private       Stage      stage;
     private final GameMode[] gameModes = {GameMode.AI, GameMode.PVP};
     private final String[]   marks     = {Character.toString(X_MARK), Character.toString(O_MARK)};
     private final String[]   players   = {"Jugador 1", "Jugador 2"};
-
+    private       Stage      stage;
     @FXML
     private VBox                vbox;
     @FXML

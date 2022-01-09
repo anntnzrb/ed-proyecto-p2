@@ -4,10 +4,10 @@ import ec.edu.espol.proyecto.MainApp;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
 import java.io.IOException;
-import javafx.scene.Scene;
 
 /**
  * Enum Util.
@@ -89,8 +89,8 @@ public enum Util {
             log(msg);
         }
     }
-    
-     public static Scene getNewScene(final String fxml) throws IOException {
+
+    public static Scene getNewScene(final String fxml) throws IOException {
         return new Scene(loadFXML(fxml));
     }
 }

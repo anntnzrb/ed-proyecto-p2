@@ -80,13 +80,13 @@ public final class Board {
 
         return board.clone();
     }
-    
-     public void copiarTablero(Board tabla){
+
+    public void copiarTablero(final Board tabla) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                this.board[i][j] = new Tile(i,j,tabla.board[i][j].getMark());
+                board[i][j] = new Tile(i, j, tabla.board[i][j].getMark());
             }
-        }        
+        }
     }
 
     /**
@@ -348,18 +348,19 @@ public final class Board {
     public Tile[][] getBoard() {
         return board.clone();
     }
-    
-    
-    public Tile obtenerCasilla(Board tabla){
+
+
+    public Tile obtenerCasilla(final Board tabla) {
         Tile c = null;
-        if(tabla!=null){
+        if (tabla != null) {
             for (int i = 0; i < BOARD_SIZE; i++) {
                 for (int j = 0; j < BOARD_SIZE; j++) {
-                    if(tabla.board[i][j].getMark()!=this.board[i][j].getMark())
-                        c = new Tile(i,j,tabla.board[i][j].getMark());
+                    if (tabla.board[i][j].getMark() != board[i][j].getMark()) {
+                        c = new Tile(i, j, tabla.board[i][j].getMark());
+                    }
                 }
-            }    
-        }        
+            }
+        }
         return c;
     }
 }

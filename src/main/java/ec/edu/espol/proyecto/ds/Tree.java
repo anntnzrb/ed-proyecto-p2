@@ -1,59 +1,56 @@
 package ec.edu.espol.proyecto.ds;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public final class Tree<E> {
-
     private TreeNode<E> root;
+
+    /* constructores */
+    public Tree() { }
 
     public TreeNode<E> getRoot() {
         return root;
     }
 
-    public void setRoot(TreeNode<E> root) {
+    public void setRoot(final TreeNode<E> root) {
         this.root = root;
     }
 
-    public TreeNode<E> buscarNodo(E data) {
-        return buscarNodo(data, root);
+    private TreeNode<E> findNode(final E data) {
+        return findNode(data, root);
     }
 
-    private TreeNode<E> buscarNodo(E data, TreeNode<E> n) {
-        if (n == null) {
-            return n;
-        } else if ((n.data).equals(data)) {
-            return n;
-        }
-        for (TreeNode<E> nod : n.getChildren()) {
-            TreeNode<E> nL = buscarNodo(data, nod);
-            if (nL != null) {
-                return nL;
-            }
-        }
-        return null;
+    private TreeNode<E> findNode(final E data, final TreeNode<E> treeNode) {
+        if (data == null || treeNode == null) { return null; }
+        if ((treeNode.getData()).equals(data)) { return treeNode; }
+
+        return treeNode.getChildren()
+                       .stream()
+                       .map(nod -> findNode(data, nod))
+                       .filter(Objects::nonNull)
+                       .findFirst()
+                       .orElse(null);
     }
 
-    public List<E> getUtilidadMax(E data) {
-        TreeNode<E> n = this.buscarNodo(data);
-        if (n == null) {
-            return null;
-        }
-        List<E> lData = new LinkedList<>();
-        n.getChildren().forEach((nd) -> {
-            lData.add(nd.getData());
-        });
-        Collections.sort((List)lData);
-        return lData;
+    public List<E> getUtilidadMax(final E data) {
+        if (data == null) { return null; }
+
+        final TreeNode<E> treeNode = findNode(data);
+        if (treeNode == null) { return null; }
+
+        return treeNode.getChildren()
+                       .stream()
+                       .map(TreeNode::getData)
+                       .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public static final class TreeNode<E> {
+        private final E                 data;
+        private final List<TreeNode<E>> children;
 
-        private E data;
-        private List<TreeNode<E>> children;
-        
         /* constructores */
 
         public TreeNode(final E data) {
@@ -62,18 +59,12 @@ public final class Tree<E> {
         }
 
         /* getters & setters */
-        public E getData() {
+        E getData() {
             return data;
         }
 
-        public List<TreeNode<E>> getChildren() {
+        List<TreeNode<E>> getChildren() {
             return children;
         }
-        
-        
-        
     }
-    
-    
-    
 }

@@ -4,50 +4,46 @@ import ec.edu.espol.proyecto.ds.Tree;
 import ec.edu.espol.proyecto.game.*;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
-import static ec.edu.espol.proyecto.game.Game.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import java.util.stream.Collectors;
+
+import static ec.edu.espol.proyecto.game.Game.*;
 
 public final class SecondController {
-    private Stage stage;
-    private Tree<Board> arbolTablaJuego;
-    private Board tableroActual;
-    private BorderPane rootJuego;
+    private Stage       stage;
+    private Tree<Board> gameBoardTree;
 
     /* juego */
     private Board    board;
     private Tile[][] tbl;
     private Player   p1;
     private Player   p2;
-    private AI       ai;
     private int      roundNum;
     private GameMode gameMode;
     private char     currentMark;
 
     @FXML
-    private GridPane tableroGP;
+    private GridPane boardGP;
     @FXML
     private Button   btnStart;
-    @FXML
-    private Button   btnReturn;
     @FXML
     private Button   btnShowTree;
     @FXML
@@ -62,11 +58,14 @@ public final class SecondController {
     private Label    lblTurn;
     @FXML
     private Label    lblRound;
-    
+
     @FXML
     public void initialize() {
         /* se inicializa el juego desde la ronda 1 */
         roundNum = 1;
+
+        /* árbol de tableros */
+        gameBoardTree = new Tree<>();
     }
 
     @FXML
@@ -79,8 +78,8 @@ public final class SecondController {
          *  otro humano.
          */
         if (gameMode == GameMode.AI) {
-            p2 = new Player("PC", lblMarkPlayer2.getText().charAt(0));          
-                       
+            p2 = new Player("PC", lblMarkPlayer2.getText().charAt(0));
+
         } else {
             p2 = new Player(lblNamePlayer2.getText(), lblMarkPlayer2.getText().charAt(0));
         }
@@ -95,7 +94,7 @@ public final class SecondController {
                           p1.getNickname(), p1.getMark());
         if (gameMode == GameMode.AI) {
             System.out.printf("El computador usa la marca '%s'\n", p2.getMark());
-           
+
         } else {
             System.out.printf("El jugador #2 (%s) usa la marca '%s'\n",
                               p2.getNickname(), p2.getMark());
@@ -105,72 +104,46 @@ public final class SecondController {
         /* deshabilitar botón */
         btnStart.setDisable(true);
     }
-    
-////////////////////////////////////////////////////////////////////////////////   
+
     @FXML
     public void onTreeShowBtnClick() {
-        btnShowTree.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {              
-                VBox panel = new VBox();
-                panel.setSpacing(10);
-                ObservableList fondo = panel.getChildren();
-                Stage sta = new Stage();
-                panel.setStyle("-fx-background-color: BEIGE;");
-                Scene escena = new Scene(panel, 500, 500);
-                sta.setScene(escena);
-                sta.show();
-                btnShowTree.setVisible(false);
-            }
+        btnShowTree.setOnAction(ev -> {
+            final VBox panel = new VBox();
+            panel.setSpacing(10);
+            final ObservableList<Node> fondo = panel.getChildren();
+            panel.setStyle("-fx-background-color: BEIGE;");
+            stage.setScene(new Scene(panel, 500, 500));
+            stage.show();
+            btnShowTree.setVisible(false);
         });
     }
-    
 
-    private Tile moveMachine(){
-        Tile c = null;
-        List<Board> listRecomendado = this.arbolTablaJuego.getUtilidadMax(board);
-        List<Board> opciones = new LinkedList<>();
+    private Tile aiMoveMark() {
+        final Tile tile = null;
+        final List<Board> listTables = gameBoardTree.getUtilidadMax(board);
+        final List<Board> listBestTables =
+                listTables.stream()
+                          .filter(e -> (e.utilityBoard(p2.getMark()) == listTables.get(listTables.size() - 1)
+                                                                                  .utilityBoard(p2.getMark())))
+                          .collect(Collectors.toCollection(LinkedList::new));
+
 //        listRecomendado.forEach(e->{
 //            e.showBoard();
 //        });
-        listRecomendado.stream().filter((e) -> 
-                (e.utilityBoard(p2.getMark())==listRecomendado.get(listRecomendado.size()-1).utilityBoard(p2.getMark()))).forEachOrdered((e) -> {
-            opciones.add(e);   
-        });
-        Collections.shuffle(opciones);
-        if(!opciones.isEmpty())
-            return this.board.obtenerCasilla(opciones.get(0));        
-       
-        return c;
-    }
-      
-       
-    private void PC() {    
-            while (!checkWin(p2.getMark())) {
-                if (p2.getMark() == currentMark) {           
-                    Tile c = moveMachine();
-                    if (c != null) {
-                        updateTile(c);
-                    }
-                }
-              
-            }
-        ;
-       
+
+        Collections.shuffle(listBestTables);
+
+        return listBestTables.isEmpty() ? tile : board.obtenerCasilla(listBestTables.get(0));
     }
 
-    private void esperar(int mill) {
+    private void wait(final int mill) {
         try {
-            Thread.sleep(mill * 100);
-        } catch (InterruptedException ex) {
+            Thread.sleep(mill * 100L);
+        } catch (final InterruptedException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-       
-////////////////////////////////////////////////////////////////////////////////
-       
-    
     @FXML
     private void onExitBtnClick() {
         Platform.exit();
@@ -219,25 +192,25 @@ public final class SecondController {
      * Método encargado de crear & actualizar el tablero {@link Board}.
      */
     private void updateBoard() {
-        tableroGP.getChildren().clear();
+        boardGP.getChildren().clear();
         for (int i = 0, row = tbl.length; i < row; ++i) {
             for (int j = 0, col = tbl[i].length; j < col; ++j) {
                 final Tile tile = board.getTile(i, j);
                 final StackPane stackPane = new StackPane(new Text(Character.toString(tile.getMark())));
                 stackPane.setAlignment(Pos.CENTER);
 
-                stackPane.setOnMouseClicked(ev ->{
-                    
-                      if (gameMode==GameMode.AI){
-                          updateTile(moveMachine());
-                      }else {
-                          updateTile(tile);
-                      }
-                        });
+                stackPane.setOnMouseClicked(ev -> {
+
+                    if (gameMode == GameMode.AI) {
+                        updateTile(aiMoveMark());
+                    } else {
+                        updateTile(tile);
+                    }
+                });
 
                 /* agregar letras al GridPane */
                 GridPane.setMargin(stackPane, new Insets(0, 4, 0, 4));
-                tableroGP.add(stackPane, j, i);
+                boardGP.add(stackPane, j, i);
             }
         }
     }
@@ -247,15 +220,15 @@ public final class SecondController {
      *
      * @param tile celda a modificar
      */
-    private void updateTile(final Tile tile) {       
+    private void updateTile(final Tile tile) {
         if (tile.getMark() == NULL_CHAR) {
             tile.setMark(currentMark);
             updateBoard();
 
             if (checkWin(board.checkWin())) {
-                tableroGP.setDisable(true);
+                boardGP.setDisable(true);
                 Util.alert("El juego ha terminado, para jugar denuevo regrese al menú anterior",
-                         true);
+                           true);
             }
 
             /* actualizar */
