@@ -6,11 +6,12 @@ import java.util.stream.IntStream;
 import static ec.edu.espol.proyecto.game.Game.*;
 
 public final class Board {
+
     /**
      * Tamaño del tablero (cuadrado).
      */
     private static final int BOARD_SIZE = 3;
-
+    private int utility;
     /**
      * Tablero constituido por casillas ({@link Tile}).
      */
@@ -25,13 +26,26 @@ public final class Board {
     private Player p2;
 
     /* constructores */
-    private Board() { }
+    public Board() {
+        board = new Tile[BOARD_SIZE][BOARD_SIZE];
+        utility = 10;
+        fillBoard();
+    }
 
     public Board(final Player p1, final Player p2) {
         this.p1 = p1;
         this.p2 = p2;
         board = new Tile[BOARD_SIZE][BOARD_SIZE];
+        utility = 10;
         fillBoard();
+    }
+
+    public int getUtility() {
+        return utility;
+    }
+
+    public void setUtility(int utility) {
+        this.utility = utility;
     }
 
     /**
@@ -81,7 +95,7 @@ public final class Board {
         return board.clone();
     }
 
-    public void copiarTablero(final Board tabla) {
+    public void copyBoard(final Board tabla) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 board[i][j] = new Tile(i, j, tabla.board[i][j].getMark());
@@ -89,12 +103,17 @@ public final class Board {
         }
     }
 
+    public void modifyBoard(int x, int y, char marca) {
+        this.board[x][y] = new Tile(x, y, marca);
+
+    }
+
     /**
-     * Modifica la marca del tablero a partir de las coordenadas x e y
-     * pasadas por parámetro.
+     * Modifica la marca del tablero a partir de las coordenadas x e y pasadas
+     * por parámetro.
      *
-     * @param x    coordenada x del tablero
-     * @param y    coordenada y del tablero
+     * @param x coordenada x del tablero
+     * @param y coordenada y del tablero
      * @param mark marca a modificar
      * @return copia del tablero ({@link Tile})
      */
@@ -124,16 +143,16 @@ public final class Board {
     }
 
     /**
-     * Calcula el valor de utilidad de una marca en el tablero
-     * (con respecto a la otra marca).
+     * Calcula el valor de utilidad de una marca en el tablero (con respecto a
+     * la otra marca).
      *
      * @param mark marca a analizar
      * @return valor de utilidad de la marca
      */
     public int utilityBoard(final char mark) {
         return mark == X_MARK
-               ? utilityMark(X_MARK) - utilityMark(O_MARK)
-               : utilityMark(O_MARK) - utilityMark(X_MARK);
+                ? utilityMark(X_MARK) - utilityMark(O_MARK)
+                : utilityMark(O_MARK) - utilityMark(X_MARK);
     }
 
     /**
@@ -155,18 +174,34 @@ public final class Board {
         int diag = 2;
 
         // check filas
-        if (isInRow(0, otherMark)) { --fil; }
-        if (isInRow(1, otherMark)) { --fil; }
-        if (isInRow(2, otherMark)) { --fil; }
+        if (isInRow(0, otherMark)) {
+            --fil;
+        }
+        if (isInRow(1, otherMark)) {
+            --fil;
+        }
+        if (isInRow(2, otherMark)) {
+            --fil;
+        }
 
         // check columnas
-        if (isInCol(0, otherMark)) { --col; }
-        if (isInCol(1, otherMark)) { --col; }
-        if (isInCol(2, otherMark)) { --col; }
+        if (isInCol(0, otherMark)) {
+            --col;
+        }
+        if (isInCol(1, otherMark)) {
+            --col;
+        }
+        if (isInCol(2, otherMark)) {
+            --col;
+        }
 
         // check diagonales
-        if (isInDiag(0, otherMark)) { --diag; }
-        if (isInDiag(1, otherMark)) { --diag; }
+        if (isInDiag(0, otherMark)) {
+            --diag;
+        }
+        if (isInDiag(1, otherMark)) {
+            --diag;
+        }
 
         return fil + col + diag;
     }
@@ -174,63 +209,62 @@ public final class Board {
     /* ************************************************************************
      * métodos auxiliares
      * ********************************************************************* */
-
     /**
      * Busca la marca en la fila pasada por parámetro.
      *
-     * @param row  fila a analizar
+     * @param row fila a analizar
      * @param mark marca a buscar
-     * @return {@code true} si la marca se encuentra,
-     * {@code false} caso contrario
+     * @return {@code true} si la marca se encuentra, {@code false} caso
+     * contrario
      */
     private boolean isInRow(final int row, final char mark) {
         return IntStream.range(0, BOARD_SIZE)
-                        .anyMatch(i -> board[row][i].getMark() == mark);
+                .anyMatch(i -> board[row][i].getMark() == mark);
     }
 
     /**
      * Busca la marca en la columna pasada por parámetro.
      *
-     * @param col  columna a analizar
+     * @param col columna a analizar
      * @param mark marca a buscar
-     * @return {@code true} si la marca se encuentra,
-     * {@code false} caso contrario
+     * @return {@code true} si la marca se encuentra, {@code false} caso
+     * contrario
      */
     private boolean isInCol(final int col, final char mark) {
         return IntStream.range(0, BOARD_SIZE)
-                        .anyMatch(i -> board[i][col].getMark() == mark);
+                .anyMatch(i -> board[i][col].getMark() == mark);
     }
 
     /**
-     * Busca la marca dada en alguna de las 2 diagonales. Si el valor de diag
-     * es 0, busca en la diagonal principal, caso contrario busca en la
-     * diagonal secundaria.
+     * Busca la marca dada en alguna de las 2 diagonales. Si el valor de diag es
+     * 0, busca en la diagonal principal, caso contrario busca en la diagonal
+     * secundaria.
      *
      * @param diag diagonal a analizar
      * @param mark marca a buscar
-     * @return {@code true} si la marca se encuentra,
-     * {@code false} caso contrario
+     * @return {@code true} si la marca se encuentra, {@code false} caso
+     * contrario
      */
     private boolean isInDiag(final int diag, final char mark) {
         if (diag == 0) {
             return IntStream.range(0, BOARD_SIZE - 1).anyMatch(i -> board[i][i].getMark() == mark);
         } else {
             return IntStream.iterate(BOARD_SIZE - 1, i -> i > 0, i -> i - 1)
-                            .anyMatch(i -> board[i][i].getMark() == mark);
+                    .anyMatch(i -> board[i][i].getMark() == mark);
         }
     }
 
     /**
-     * Verifica si todos los elementos de alguna de las 2 diagonales
-     * son iguales.
+     * Verifica si todos los elementos de alguna de las 2 diagonales son
+     * iguales.
      *
      * @return marca ganadora (NULL_CHAR si nadie gana)
      */
     public char checkDiagonals() {
         // check diagonal principal
         boolean isDiagonalValid = IntStream.range(0, BOARD_SIZE - 1)
-                                           .noneMatch(i -> board[i + 1][i + 1].getMark() == NULL_CHAR
-                                                           || board[i][i].getMark() != board[i + 1][i + 1].getMark());
+                .noneMatch(i -> board[i + 1][i + 1].getMark() == NULL_CHAR
+                || board[i][i].getMark() != board[i + 1][i + 1].getMark());
 
         // check diagonal secundaria (solo si la principal es válida)
         if (!isDiagonalValid) {
@@ -269,18 +303,18 @@ public final class Board {
     public char checkRows() {
         // check primera fila
         final boolean frCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[0][i].getMark() == NULL_CHAR
-                                                         || board[0][i].getMark() != board[0][i + 1].getMark());
+                .noneMatch(i -> board[0][i].getMark() == NULL_CHAR
+                || board[0][i].getMark() != board[0][i + 1].getMark());
 
         // check segunda fila
         final boolean srCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[1][i].getMark() == NULL_CHAR
-                                                         || board[1][i].getMark() != board[1][i + 1].getMark());
+                .noneMatch(i -> board[1][i].getMark() == NULL_CHAR
+                || board[1][i].getMark() != board[1][i + 1].getMark());
 
         // check tercera fila
         final boolean trCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[2][i].getMark() == NULL_CHAR
-                                                         || board[2][i].getMark() != board[2][i + 1].getMark());
+                .noneMatch(i -> board[2][i].getMark() == NULL_CHAR
+                || board[2][i].getMark() != board[2][i + 1].getMark());
 
         /* si se gana, retornar la marca ganadora */
         if (frCheck || srCheck || trCheck) {
@@ -304,18 +338,18 @@ public final class Board {
     public char checkCols() {
         // check primera columna
         final boolean fcCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[i][0].getMark() == NULL_CHAR
-                                                         || board[i][0].getMark() != board[i + 1][0].getMark());
+                .noneMatch(i -> board[i][0].getMark() == NULL_CHAR
+                || board[i][0].getMark() != board[i + 1][0].getMark());
 
         // check segunda columna
         final boolean scCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[i][1].getMark() == NULL_CHAR
-                                                         || board[i][1].getMark() != board[i + 1][1].getMark());
+                .noneMatch(i -> board[i][1].getMark() == NULL_CHAR
+                || board[i][1].getMark() != board[i + 1][1].getMark());
 
         // check tercera columna
         final boolean tcCheck = IntStream.range(0, BOARD_SIZE - 1)
-                                         .noneMatch(i -> board[i][2].getMark() == NULL_CHAR
-                                                         || board[i][2].getMark() != board[i + 1][2].getMark());
+                .noneMatch(i -> board[i][2].getMark() == NULL_CHAR
+                || board[i][2].getMark() != board[i + 1][2].getMark());
 
         if (fcCheck || scCheck || tcCheck) {
             if (fcCheck) {
@@ -335,20 +369,19 @@ public final class Board {
      * <p>
      * El tablero estará completo cuando éste no tenga mas marcas de tipo '*'.
      *
-     * @return {@code true} si el tablero está lleno
-     * {@code false} caso contrario
+     * @return {@code true} si el tablero está lleno {@code false} caso
+     * contrario
      */
     public boolean isFull() {
         return Arrays.stream(board)
-                     .flatMap(Arrays::stream)
-                     .noneMatch(tile -> tile.getMark() == NULL_CHAR);
+                .flatMap(Arrays::stream)
+                .noneMatch(tile -> tile.getMark() == NULL_CHAR);
     }
 
     /* getters & setters */
     public Tile[][] getBoard() {
         return board.clone();
     }
-
 
     public Tile obtenerCasilla(final Board tabla) {
         Tile c = null;

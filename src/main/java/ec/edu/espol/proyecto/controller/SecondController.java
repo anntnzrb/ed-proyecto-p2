@@ -65,13 +65,17 @@ public final class SecondController {
         roundNum = 1;
 
         /* árbol de tableros */
-        gameBoardTree = new Tree<>();
+        board=new Board();
+        gameBoardTree = new Tree<>(new Board());  
     }
 
     @FXML
     private void onStartBtnClick() {
+ 
+       
         /* al iniciar la partida se crea el jugador (humano) */
         p1 = new Player(lblNamePlayer1.getText(), lblMarkPlayer1.getText().charAt(0));
+        
 
         /*
          * si se juega contra la máquina, crear un objeto AI, caso contrario,
@@ -127,13 +131,51 @@ public final class SecondController {
                                                                                   .utilityBoard(p2.getMark())))
                           .collect(Collectors.toCollection(LinkedList::new));
 
-//        listRecomendado.forEach(e->{
-//            e.showBoard();
-//        });
-
         Collections.shuffle(listBestTables);
-
         return listBestTables.isEmpty() ? tile : board.obtenerCasilla(listBestTables.get(0));
+    }
+    
+     private void generateTree(){     //cambiar nombre
+        Player player;
+        char marca1, marca2;
+        if(p1.getMark()==currentMark){
+            player = new Player(p1.getNickname(),p1.getMark());
+            marca1 = p1.getMark();
+            marca2 = p2.getMark();
+        }            
+        else{
+            player = new Player(p2.getNickname(),p2.getMark());
+            marca1 = p2.getMark();
+            marca2 = p1.getMark();
+        }
+        Board tabla = new  Board();
+        tabla.copyBoard(this.board);
+        for (int i = 0; i < board.getBOARD_SIZE(); i++) {
+            for (int j = 0; j < board.getBOARD_SIZE(); j++) {
+                if(board.getBoard()[i][j].getMark()=='*'){
+                    Board firstBoard  = new Board();
+                    firstBoard.copyBoard(tabla);
+                    firstBoard.modifyBoard(i, j, marca1);
+                    gameBoardTree.add(firstBoard, tabla);
+                    gameBoardTree.findNode(firstBoard).getData().setUtility(10);
+                    
+                    for (int k = 0; k < firstBoard.getBOARD_SIZE(); k++) {
+                        for (int l = 0; l < firstBoard.getBOARD_SIZE(); l++) {
+                            if(firstBoard.getBoard()[k][l].getMark()=='*'){
+                                Board secondBoard = new Board(p1,p2);
+                                secondBoard.copyBoard(firstBoard);
+                                secondBoard.modifyBoard(k, l, marca2);
+                                secondBoard.setUtility(secondBoard.utilityBoard(player.getMark()));
+                                if(secondBoard.utilityBoard(player.getMark())<firstBoard.getUtility())
+                                    gameBoardTree.findNode(firstBoard).getData().setUtility(secondBoard.getUtility());                                  
+                                    gameBoardTree.add(secondBoard, firstBoard);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+       
     }
 
     private void wait(final int mill) {
@@ -202,6 +244,7 @@ public final class SecondController {
                 stackPane.setOnMouseClicked(ev -> {
 
                     if (gameMode == GameMode.AI) {
+                        generateTree();
                         updateTile(aiMoveMark());
                     } else {
                         updateTile(tile);
