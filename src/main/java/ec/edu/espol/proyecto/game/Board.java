@@ -40,6 +40,10 @@ public final class Board {
         fillBoard();
     }
 
+    public Tile[][] cloneBoard() {
+        return board.clone();
+    }
+
     public int getUtility() {
         return utility;
     }
@@ -101,11 +105,6 @@ public final class Board {
                 board[i][j] = new Tile(i, j, tabla.board[i][j].getMark());
             }
         }
-    }
-
-    public void modifyBoard(int x, int y, char marca) {
-        this.board[x][y] = new Tile(x, y, marca);
-
     }
 
     /**
@@ -381,6 +380,10 @@ public final class Board {
     /* getters & setters */
     public Tile[][] getBoard() {
         return board.clone();
+    }
+
+    public void setBoard(Tile[][] board) {
+        this.board = board;
     }
 
     public Tile obtenerCasilla(final Board tabla) {

@@ -1,7 +1,10 @@
 package ec.edu.espol.proyecto.controller;
 
 import ec.edu.espol.proyecto.ds.Tree;
-import ec.edu.espol.proyecto.game.*;
+import ec.edu.espol.proyecto.game.Board;
+import ec.edu.espol.proyecto.game.GameMode;
+import ec.edu.espol.proyecto.game.Player;
+import ec.edu.espol.proyecto.game.Tile;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -30,7 +33,7 @@ import static ec.edu.espol.proyecto.game.Game.*;
 public final class SecondController {
     private Stage       stage;
     private Tree<Board> gameBoardTree;
-
+    private List<Board> listGeneratedBoards;
     /* juego */
     private Board    board;
     private Tile[][] tbl;
@@ -63,19 +66,12 @@ public final class SecondController {
     public void initialize() {
         /* se inicializa el juego desde la ronda 1 */
         roundNum = 1;
-
-        /* árbol de tableros */
-        board=new Board();
-        gameBoardTree = new Tree<>(new Board());  
     }
 
     @FXML
     private void onStartBtnClick() {
- 
-       
         /* al iniciar la partida se crea el jugador (humano) */
         p1 = new Player(lblNamePlayer1.getText(), lblMarkPlayer1.getText().charAt(0));
-        
 
         /*
          * si se juega contra la máquina, crear un objeto AI, caso contrario,
@@ -108,10 +104,11 @@ public final class SecondController {
         /* deshabilitar botón */
         btnStart.setDisable(true);
     }
+
     /*
     Metodo que genera los paneles de juego
     */
-    public GridPane generarTablero(){
+    public GridPane generarTablero() {
         GridPane tablero = new GridPane();
         tablero.setAlignment(Pos.CENTER);
         tablero.setGridLinesVisible(true);
@@ -121,7 +118,7 @@ public final class SecondController {
         tablero.add(playerMark, 0, 0);
         return tablero;
     }
-    
+
     /*
     Metodo que recibe los tableros y los agrega a la pantalla
     */
@@ -153,48 +150,35 @@ public final class SecondController {
         Collections.shuffle(listBestTables);
         return listBestTables.isEmpty() ? tile : board.obtenerCasilla(listBestTables.get(0));
     }
-    
-     private void generateTree(){     //cambiar nombre
-        Player player;
-        char marca1, marca2;
-        if(p1.getMark()==currentMark){
-            player = new Player(p1.getNickname(),p1.getMark());
-            marca1 = p1.getMark();
-            marca2 = p2.getMark();
-        }            
-        else{
-            player = new Player(p2.getNickname(),p2.getMark());
-            marca1 = p2.getMark();
-            marca2 = p1.getMark();
+
+    private void generateTree(){
+        char firstPlayer = NULL_CHAR;
+        char opPlayer = NULL_CHAR;
+        if (currentMark == X_MARK) {
+            firstPlayer = X_MARK;
+            opPlayer = O_MARK;
+        } else if (currentMark == O_MARK) {
+            firstPlayer = O_MARK;
+            opPlayer = X_MARK;
         }
-        Board tabla = new  Board();
-        tabla.copyBoard(this.board);
-        for (int i = 0; i < board.getBOARD_SIZE(); i++) {
-            for (int j = 0; j < board.getBOARD_SIZE(); j++) {
-                if(board.getBoard()[i][j].getMark()=='*'){
-                    Board firstBoard  = new Board();
-                    firstBoard.copyBoard(tabla);
-                    firstBoard.modifyBoard(i, j, marca1);
-                    gameBoardTree.add(firstBoard, tabla);
-                    gameBoardTree.findNode(firstBoard).getData().setUtility(10);
-                    
-                    for (int k = 0; k < firstBoard.getBOARD_SIZE(); k++) {
-                        for (int l = 0; l < firstBoard.getBOARD_SIZE(); l++) {
-                            if(firstBoard.getBoard()[k][l].getMark()=='*'){
-                                Board secondBoard = new Board(p1,p2);
-                                secondBoard.copyBoard(firstBoard);
-                                secondBoard.modifyBoard(k, l, marca2);
-                                secondBoard.setUtility(secondBoard.utilityBoard(player.getMark()));
-                                if(secondBoard.utilityBoard(player.getMark())<firstBoard.getUtility())
-                                    gameBoardTree.findNode(firstBoard).getData().setUtility(secondBoard.getUtility());                                  
-                                    gameBoardTree.add(secondBoard, firstBoard);
-                            }
-                        }
-                    }
+
+        for (int i = 0, tblLength = tbl.length; i < tblLength; i++) {
+            final Tile[] row = tbl[i];
+            for (int j = 0, rowLength = tbl[i].length; j < rowLength; j++) {
+                final Tile t = row[j];
+                if (t.getMark() == NULL_CHAR) {
+                    Board newBoard = new Board();
+                    newBoard.setBoard(board.cloneBoard());
+                    listGeneratedBoards.add(newBoard);
+                    newBoard.modBoard(i, j, firstPlayer);
+                    gameBoardTree.add(board, newBoard);
                 }
             }
         }
-       
+    }
+
+    private Player findPlayerByMark(final char mark) {
+        return p1.getMark() == mark ? p1 : p2;
     }
 
     private void wait(final int mill) {
@@ -245,6 +229,9 @@ public final class SecondController {
      */
     private void buildBoard() {
         board = new Board(p1, p2);
+
+        if (gameMode == GameMode.AI) { gameBoardTree = new Tree<>(board); }
+
         tbl = board.getBoard();
         updateBoard();
     }
@@ -263,7 +250,7 @@ public final class SecondController {
                 stackPane.setOnMouseClicked(ev -> {
 
                     if (gameMode == GameMode.AI) {
-                        generateTree();
+                        //generateTree();
                         updateTile(aiMoveMark());
                     } else {
                         updateTile(tile);

@@ -57,7 +57,7 @@ public final class Tree<E> {
         return lData;
     }
 
-    public boolean add(E child, E parent) {
+    public boolean add(E parent, E child) {
         TreeNode<E> TreeNode = findNode(child);
         if (TreeNode != null) {
             return false;
@@ -73,6 +73,7 @@ public final class Tree<E> {
             parentNode.addChild(TreeNode);
             return true;
         }
+
         return false;
     }
 
