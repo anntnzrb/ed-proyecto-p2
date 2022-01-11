@@ -121,11 +121,11 @@ final class BoardTest {
          * Tablero con diagonal secundaria
          * ****************************************************************** */
         tblDiagonal1 = new Board(p1, p2);
-        tblDiagonal1.modBoard(0, 0, O_MARK);
         tblDiagonal1.modBoard(0, 1, X_MARK);
+        tblDiagonal1.modBoard(0, 2, O_MARK);
         tblDiagonal1.modBoard(1, 1, O_MARK);
-        tblDiagonal1.modBoard(0, 2, X_MARK);
-        tblDiagonal1.modBoard(2, 2, O_MARK);
+        tblDiagonal1.modBoard(2, 2, X_MARK);
+        tblDiagonal1.modBoard(2, 0, O_MARK);
 
         /* *********************************************************************
          * Tablero utilidad

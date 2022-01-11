@@ -268,9 +268,9 @@ public final class Board {
 
         // check diagonal secundaria (solo si la principal es válida)
         if (!isDiagonalValid) {
-            for (int i = BOARD_SIZE - 1; i > 0; --i) {
-                final var x = board[i][i].getMark();
-                final var y = board[i - 1][i - 1].getMark();
+            for (int i = BOARD_SIZE - 1, j = 0; i > 0; --i, ++j) {
+                final var x = board[j][i].getMark();
+                final var y = board[j + 1][i - 1].getMark();
 
                 /* si se encuentra el NULL_CHAR, no es válida */
                 if (x == NULL_CHAR || y == NULL_CHAR) {
