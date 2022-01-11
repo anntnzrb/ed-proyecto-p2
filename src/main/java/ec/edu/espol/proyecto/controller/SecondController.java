@@ -108,6 +108,23 @@ public final class SecondController {
         /* deshabilitar botón */
         btnStart.setDisable(true);
     }
+    /*
+    Metodo que genera los paneles de juego
+    */
+    public GridPane generarTablero(){
+        GridPane tablero = new GridPane();
+        tablero.setAlignment(Pos.CENTER);
+        tablero.setGridLinesVisible(true);
+        tablero.setHgap(3);
+        tablero.setVgap(3);
+        Label playerMark = new Label(String.valueOf(p1.getMark()));
+        tablero.add(playerMark, 0, 0);
+        return tablero;
+    }
+    
+    /*
+    Metodo que recibe los tableros y los agrega a la pantalla
+    */
 
     @FXML
     public void onTreeShowBtnClick() {
@@ -116,6 +133,8 @@ public final class SecondController {
             panel.setSpacing(10);
             final ObservableList<Node> fondo = panel.getChildren();
             panel.setStyle("-fx-background-color: BEIGE;");
+            panel.getChildren().add(generarTablero());
+            //playerGrid.setPadding(new Insets(25, 25, 25, 25));
             stage.setScene(new Scene(panel, 500, 500));
             stage.show();
             btnShowTree.setVisible(false);
