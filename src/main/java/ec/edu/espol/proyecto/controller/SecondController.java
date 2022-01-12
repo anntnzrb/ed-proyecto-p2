@@ -1,10 +1,6 @@
 package ec.edu.espol.proyecto.controller;
 
-import ec.edu.espol.proyecto.ds.Tree;
-import ec.edu.espol.proyecto.game.Board;
-import ec.edu.espol.proyecto.game.GameMode;
-import ec.edu.espol.proyecto.game.Player;
-import ec.edu.espol.proyecto.game.Tile;
+import ec.edu.espol.proyecto.game.*;
 import ec.edu.espol.proyecto.utils.Util;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -23,17 +19,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static ec.edu.espol.proyecto.game.Game.*;
 
 public final class SecondController {
-    private Stage       stage;
-    private Tree<Board> gameBoardTree;
-    private List<Board> listGeneratedBoards;
+    private Stage stage;
+
     /* juego */
     private Board    board;
     private Tile[][] tbl;
@@ -47,6 +38,8 @@ public final class SecondController {
     private GridPane boardGP;
     @FXML
     private Button   btnStart;
+    @FXML
+    private Button   btnNext;
     @FXML
     private Button   btnShowTree;
     @FXML
@@ -66,6 +59,8 @@ public final class SecondController {
     public void initialize() {
         /* se inicializa el juego desde la ronda 1 */
         roundNum = 1;
+
+        btnNext.setVisible(false);
     }
 
     @FXML
@@ -105,6 +100,12 @@ public final class SecondController {
         btnStart.setDisable(true);
     }
 
+    @FXML
+    private void onNextBtnClick() {
+        System.out.println("Es el turno de AI");
+        updateBoard();
+    }
+
     /*
     Metodo que genera los paneles de juego
     */
@@ -138,44 +139,18 @@ public final class SecondController {
         });
     }
 
-    private Tile aiMoveMark() {
-        final Tile tile = null;
-        final List<Board> listTables = gameBoardTree.getUtilidadMax(board);
-        final List<Board> listBestTables =
-                listTables.stream()
-                          .filter(e -> (e.utilityBoard(p2.getMark()) == listTables.get(listTables.size() - 1)
-                                                                                  .utilityBoard(p2.getMark())))
-                          .collect(Collectors.toCollection(LinkedList::new));
+    //private Tile aiMoveMark() {
+    //    final Tile tile = null;
+    //    final List<Board> listTables = gameBoardTree.getUtilidadMax(board);
+    //    final List<Board> listBestTables =
+    //            listTables.stream()
+    //                      .filter(e -> (e.utilityBoard(p2.getMark()) == listTables.get(listTables.size() - 1)
+    //                                                                              .utilityBoard(p2.getMark())))
+    //                      .collect(Collectors.toCollection(LinkedList::new));
 
-        Collections.shuffle(listBestTables);
-        return listBestTables.isEmpty() ? tile : board.obtenerCasilla(listBestTables.get(0));
-    }
-
-    private void generateTree(){
-        char firstPlayer = NULL_CHAR;
-        char opPlayer = NULL_CHAR;
-        if (currentMark == X_MARK) {
-            firstPlayer = X_MARK;
-            opPlayer = O_MARK;
-        } else if (currentMark == O_MARK) {
-            firstPlayer = O_MARK;
-            opPlayer = X_MARK;
-        }
-
-        for (int i = 0, tblLength = tbl.length; i < tblLength; i++) {
-            final Tile[] row = tbl[i];
-            for (int j = 0, rowLength = tbl[i].length; j < rowLength; j++) {
-                final Tile t = row[j];
-                if (t.getMark() == NULL_CHAR) {
-                    Board newBoard = new Board();
-                    newBoard.setBoard(board.cloneBoard());
-                    listGeneratedBoards.add(newBoard);
-                    newBoard.modBoard(i, j, firstPlayer);
-                    gameBoardTree.add(board, newBoard);
-                }
-            }
-        }
-    }
+    //    Collections.shuffle(listBestTables);
+    //    return listBestTables.isEmpty() ? tile : board.obtenerCasilla(listBestTables.get(0));
+    //}
 
     private Player findPlayerByMark(final char mark) {
         return p1.getMark() == mark ? p1 : p2;
@@ -230,8 +205,6 @@ public final class SecondController {
     private void buildBoard() {
         board = new Board(p1, p2);
 
-        if (gameMode == GameMode.AI) { gameBoardTree = new Tree<>(board); }
-
         tbl = board.getBoard();
         updateBoard();
     }
@@ -247,15 +220,16 @@ public final class SecondController {
                 final StackPane stackPane = new StackPane(new Text(Character.toString(tile.getMark())));
                 stackPane.setAlignment(Pos.CENTER);
 
-                stackPane.setOnMouseClicked(ev -> {
-
-                    if (gameMode == GameMode.AI) {
-                        //generateTree();
-                        updateTile(aiMoveMark());
-                    } else {
+                if (isAITurn()) {
+                    AI.generateBoards(board, currentMark);
+                } else {
+                    stackPane.setOnMouseClicked(ev -> {
                         updateTile(tile);
-                    }
-                });
+                        if (gameMode == GameMode.AI) {
+                            btnNext.setVisible(true);
+                        }
+                    });
+                }
 
                 /* agregar letras al GridPane */
                 GridPane.setMargin(stackPane, new Insets(0, 4, 0, 4));
@@ -356,5 +330,9 @@ public final class SecondController {
         System.out.printf(roundNum == 0
                           ? "\nEmpezando juego... (ronda #%d) [%s]\n"
                           : "\nAvanzando a la siguiente ronda... (ronda #%d) [%s]\n", roundNum, currentMark);
+    }
+
+    private boolean isAITurn() {
+        return gameMode == GameMode.AI && currentMark != p1.getMark();
     }
 }

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.SecondController">
+<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto.controller.SecondController">
     <children>
         <MenuBar>
             <menus>
@@ -79,6 +79,11 @@
                 </Label>
                 <Label fx:id="lblTurn" layoutX="119.0" layoutY="76.0" />
                 <Label fx:id="lblRound" layoutX="119.0" layoutY="100.0" />
+            <Button fx:id="btnNext" layoutX="472.0" layoutY="271.0" mnemonicParsing="false" onAction="#onNextBtnClick" text="Siguiente">
+               <font>
+                  <Font name="System Bold Italic" size="13.0" />
+               </font>
+            </Button>
             </children>
         </AnchorPane>
     </children>

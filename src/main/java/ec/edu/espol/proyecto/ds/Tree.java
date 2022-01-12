@@ -8,7 +8,7 @@ public final class Tree<E> {
     private final Comparator<E> cmp;
 
     /* constructores */
-    Tree(final E data, final Comparator<E> cmp) {
+    public Tree(final E data, final Comparator<E> cmp) {
         this.data = data;
         this.cmp = cmp;
         children = new Heap<>((o1, o2) -> cmp.compare(o1.getData(), o2.getData()));
