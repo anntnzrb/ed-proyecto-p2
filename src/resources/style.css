@@ -1,0 +1,72 @@
+
+.label{
+    -fx-text-fill: black;
+    -fx-font-family: "Britannic Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+.text-field{
+    -fx-text-fill: black;
+    -fx-font-family: "Britannic Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+.radio-button{
+    -fx-text-fill: black;
+    -fx-font-family: "Britannic Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+.root{
+    -fx-background-color: #e4fbfb;
+}
+
+#labelConfig{
+    -fx-text-fill: #010440;
+    -fx-font-family: "Britannic Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 17px;  
+}
+
+.button{
+    -fx-text-fill: black;
+    -fx-font-family: "Britannic Bold";
+    -fx-font-weight: bold;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );    
+    -fx-text-align: center;
+    -fx-font-size: 20px;
+    
+}
+#botonesPrincipal{
+   -fx-font-size: 25px;
+}
+
+#botonesConfig{
+    -fx-font-size: 20px;
+}
+
+#rooLeft{
+    -fx-background-color: #e4fbfb;
+}
+
+#rooR{
+    -fx-background-color: #d0bdf6;
+    -fx-font-size: 20px;
+}
+
+#turno{
+    -fx-background-color: #e4fbfb;
+}
+#topRoot{
+    -fx-background-color: #e4fbfb;
+    -fx-align-content:"TOP_CENTER"    
+}
+
+
+#subtitulos{
+    -fx-text-fill: #010440;
+    -fx-font-family: "Britannic Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 21px;  
+}
